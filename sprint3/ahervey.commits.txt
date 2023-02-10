@@ -1,0 +1,81 @@
+## In paint_app_tut/misc_paint.cpp
+if (scribbleArea->ustack.isEmpty()) {
+         return;
+     }
+     
+if (scribbleArea->rstack.isEmpty()) {
+         return;
+     }
+     
+void Misc_Paint::opacityChange(int val){
+     if (val == 1) {
+         if (penOpacity == 1) {
+             return;
+         }
+         else {
+             QColor temp = scribbleArea->myPenColor;
+             penOpacity += buffer;
+             temp.setAlphaF(penOpacity);
+             scribbleArea->setPenColor(temp);
+         }
+     }
+     else {
+         if (penOpacity == 0) {
+             return;
+         }
+         else {
+             QColor temp = scribbleArea->myPenColor;
+             penOpacity -= buffer;
+             temp.setAlphaF(penOpacity);
+             //scribbleArea->setpen
+             scribbleArea->setPenColor(temp);
+         }
+     }
+ }
+ 
+ void Misc_Paint::setErase() {
+     scribbleArea->setPenColor(Qt::white);
+ }
+ 
+ editMenu->addAction(eraseAct);
+editMenu->addAction(increaseOpacity);
+editMenu->addAction(decreaseOpacity);
+     
+ eraseAct = new QAction(tr("Eraser Tool"), this);
+     connect(eraseAct, SIGNAL(triggered()), this, SLOT(setErase()));
+
+     increaseOpacity = new QAction(tr("Increase Opacity"), this);
+     connect(increaseOpacity,  &QAction::triggered, this, [this]{ opacityChange(1); });
+     //connect(increaseOpacity, SIGNAL(triggered()), this, SLOT(opacityChange(int val=1)));
+
+     decreaseOpacity = new QAction(tr("Decrease Opacity"), this);
+     connect(decreaseOpacity,  &QAction::triggered, this, [this]{ opacityChange(0); });
+     //connect(decreaseOpacity, SIGNAL(triggered()), this, SLOT(opacityChange(int val=0)));
+     
+     
+## In paint_app_tut/misc_paint.h
+
+void setErase();
+void opacityChange(int val);
+
+QAction *eraseAct;
+QAction *increaseOpacity;
+QAction *decreaseOpacity;
+double penOpacity = 1.0;
+double buffer = .10;
+
+## In paint_app_tut/scribblearea.cpp
+Void ScribbleArea::clearImage() {
+     ustack.push_back(image); //This line and the other one to be specific. Added the whole function to show context
+     image.fill(qRgb(255, 255, 255));
+     modified = true;
+     update();
+     ustack.push_back(image);
+ }
+ 
+ Added to undo call:
+ 
+ int test = ustack.size();
+     if (test == 0 || test == 1){
+         return;
+     }

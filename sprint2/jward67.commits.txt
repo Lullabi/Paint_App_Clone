@@ -1,0 +1,133 @@
+"misc_paint.cpp"
+11:17:eea282a1 (jward67            2022-04-05 17:51:00 -0400  17) //#include "colorselect.h"
+69:108:eea282a1 (jward67            2022-04-05 17:51:00 -0400 108) // For Tool Button Sets:
+70:109:eea282a1 (jward67            2022-04-05 17:51:00 -0400 109) void Misc_Paint::colorPickerButton() {
+71:110:eea282a1 (jward67            2022-04-05 17:51:00 -0400 110)     //QPushButton *button = (QPushButton *)sender();
+72:111:eea282a1 (jward67            2022-04-05 17:51:00 -0400 111)     qInfo("Testing Button\n");
+73:112:eea282a1 (jward67            2022-04-05 17:51:00 -0400 112)     QColor newColor;
+74:113:eea282a1 (jward67            2022-04-05 17:51:00 -0400 113) /* void ScribbleArea::mousePressEvent(QMouseEvent *event) {
+75:114:eea282a1 (jward67            2022-04-05 17:51:00 -0400 114)     ustack.push_back(image);
+76:115:eea282a1 (jward67            2022-04-05 17:51:00 -0400 115)     if(event->button() == Qt::LeftButton) {
+77:116:eea282a1 (jward67            2022-04-05 17:51:00 -0400 116)         lastPoint = event->pos();
+78:117:eea282a1 (jward67            2022-04-05 17:51:00 -0400 117)         scribbling = true;
+79:118:eea282a1 (jward67            2022-04-05 17:51:00 -0400 118)     }
+80:119:eea282a1 (jward67            2022-04-05 17:51:00 -0400 119) }*/
+81:120:eea282a1 (jward67            2022-04-05 17:51:00 -0400 120) 
+82:121:eea282a1 (jward67            2022-04-05 17:51:00 -0400 121)     qDebug() << scribbleArea->getPosition();
+83:122:eea282a1 (jward67            2022-04-05 17:51:00 -0400 122) 
+84:123:eea282a1 (jward67            2022-04-05 17:51:00 -0400 123) //    QMouseEvent *event;
+85:124:eea282a1 (jward67            2022-04-05 17:51:00 -0400 124) //    if (event->button() == Qt::LeftButton) {
+86:125:eea282a1 (jward67            2022-04-05 17:51:00 -0400 125)   //      position = event->pos();
+87:126:eea282a1 (jward67            2022-04-05 17:51:00 -0400 126)   //      QColor color = pixelColor(position);
+88:127:eea282a1 (jward67            2022-04-05 17:51:00 -0400 127) 
+89:128:eea282a1 (jward67            2022-04-05 17:51:00 -0400 128) //    }
+90:129:eea282a1 (jward67            2022-04-05 17:51:00 -0400 129)     newColor = scribbleArea->getImage().pixelColor(scribbleArea->getPosition());
+91:130:eea282a1 (jward67            2022-04-05 17:51:00 -0400 130) 
+92:131:eea282a1 (jward67            2022-04-05 17:51:00 -0400 131)     if (newColor.isValid()) { scribbleArea->setPenColor(newColor); }
+93:132:eea282a1 (jward67            2022-04-05 17:51:00 -0400 132) 
+94:133:eea282a1 (jward67            2022-04-05 17:51:00 -0400 133)     qDebug() << newColor;
+95:134:eea282a1 (jward67            2022-04-05 17:51:00 -0400 134)     //scribbleArea->setPenColor(x, y);
+96:135:eea282a1 (jward67            2022-04-05 17:51:00 -0400 135) 
+97:136:eea282a1 (jward67            2022-04-05 17:51:00 -0400 136) }
+98:137:eea282a1 (jward67            2022-04-05 17:51:00 -0400 137) 
+101:140:eea282a1 (jward67            2022-04-05 17:51:00 -0400 140)                        tr("<p>The <b>Scribble</b> example is awesome"
+170:318:eea282a1 (jward67            2022-04-05 17:51:00 -0400 318)     toolButtons[0] = new QPushButton();
+171:319:eea282a1 (jward67            2022-04-05 17:51:00 -0400 319)     //colorPal[0] = buttons[0]->palette();
+176:340:eea282a1 (jward67            2022-04-05 17:51:00 -0400 340)     // For Tool Buttons
+177:341:eea282a1 (jward67            2022-04-05 17:51:00 -0400 341)     toolButtons[0]->setText("Color Picker");
+178:342:eea282a1 (jward67            2022-04-05 17:51:00 -0400 342)     toolButtons[0]->setFixedWidth(100);
+179:343:eea282a1 (jward67            2022-04-05 17:51:00 -0400 343)     connect(toolButtons[0], SIGNAL(released()), this, SLOT(colorPickerButton()));
+180:344:eea282a1 (jward67            2022-04-05 17:51:00 -0400 344)     layout->addWidget(toolButtons[0]);
+181:345:eea282a1 (jward67            2022-04-05 17:51:00 -0400 345) 
+
+"misc_paint.h"
+34:53:eea282a1 (jward67            2022-04-05 17:51:00 -0400  53)     void colorPickerButton();
+47:82:eea282a1 (jward67            2022-04-05 17:51:00 -0400  82)     QPushButton *toolButtons[1];
+
+"scribblearea.cpp"
+48:51:eea282a1 (jward67            2022-04-05 17:51:00 -0400  51) QImage ScribbleArea::getImage() { return image; }
+49:52:eea282a1 (jward67            2022-04-05 17:51:00 -0400  52) 
+50:53:eea282a1 (jward67            2022-04-05 17:51:00 -0400  53) QPoint ScribbleArea::getPosition() { return lastPoint; }
+51:54:eea282a1 (jward67            2022-04-05 17:51:00 -0400  54) 
+  
+"scribblearea.h"
+7:25:eea282a1 (jward67            2022-04-05 17:51:00 -0400 25)     QImage getImage();
+8:26:eea282a1 (jward67            2022-04-05 17:51:00 -0400 26)     QPoint getPosition();
+9:66:eea282a1 (jward67            2022-04-05 17:51:00 -0400 66)     QColor myRightPenColor = QColor(255, 0, 0);
+10:67:eea282a1 (jward67            2022-04-05 17:51:00 -0400 67)     // For Reference: QColor(int r, int g, int b, int a = 255);
+11:68:eea282a1 (jward67            2022-04-05 17:51:00 -0400 68)     // For Change in Opacity: QColor(255, 0, 0, 127)
+  
+"colorselect.cpp"
+1:eea282a1 (jward67 2022-04-05 17:51:00 -0400  1) //
+2:eea282a1 (jward67 2022-04-05 17:51:00 -0400  2) // Created by Miroslav Bendik on Dec 19, 2012
+3:eea282a1 (jward67 2022-04-05 17:51:00 -0400  3) //
+4:eea282a1 (jward67 2022-04-05 17:51:00 -0400  4) #include <QPalette>
+5:eea282a1 (jward67 2022-04-05 17:51:00 -0400  5) #include "colorselect.h"
+6:eea282a1 (jward67 2022-04-05 17:51:00 -0400  6) #include "ui_colorselect.h"
+7:eea282a1 (jward67 2022-04-05 17:51:00 -0400  7) 
+8:eea282a1 (jward67 2022-04-05 17:51:00 -0400  8) ColorSelect::ColorSelect(QWidget *parent) :
+9:eea282a1 (jward67 2022-04-05 17:51:00 -0400  9)     QWidget(parent),
+10:eea282a1 (jward67 2022-04-05 17:51:00 -0400 10)     ui(new Ui::ColorSelect)
+11:eea282a1 (jward67 2022-04-05 17:51:00 -0400 11) {
+12:eea282a1 (jward67 2022-04-05 17:51:00 -0400 12)     ui->setupUi(this);
+13:eea282a1 (jward67 2022-04-05 17:51:00 -0400 13)     connect(ui->redSlider, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+14:eea282a1 (jward67 2022-04-05 17:51:00 -0400 14)     connect(ui->greenSlider, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+15:eea282a1 (jward67 2022-04-05 17:51:00 -0400 15)     connect(ui->blueSlider, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+16:eea282a1 (jward67 2022-04-05 17:51:00 -0400 16)     onColorChanged();
+17:eea282a1 (jward67 2022-04-05 17:51:00 -0400 17) }
+18:eea282a1 (jward67 2022-04-05 17:51:00 -0400 18) 
+19:eea282a1 (jward67 2022-04-05 17:51:00 -0400 19) ColorSelect::~ColorSelect()
+20:eea282a1 (jward67 2022-04-05 17:51:00 -0400 20) {
+21:eea282a1 (jward67 2022-04-05 17:51:00 -0400 21)     delete ui;
+22:eea282a1 (jward67 2022-04-05 17:51:00 -0400 22) }
+23:eea282a1 (jward67 2022-04-05 17:51:00 -0400 23) 
+24:eea282a1 (jward67 2022-04-05 17:51:00 -0400 24) void ColorSelect::onColorChanged()
+25:eea282a1 (jward67 2022-04-05 17:51:00 -0400 25) {
+26:eea282a1 (jward67 2022-04-05 17:51:00 -0400 26)     m_color.setRgb(ui->redSlider->value(), ui->greenSlider->value(), ui->blueSlider->value());
+27:eea282a1 (jward67 2022-04-05 17:51:00 -0400 27)     QPalette pal = ui->displayWidget->palette();
+28:eea282a1 (jward67 2022-04-05 17:51:00 -0400 28)     pal.setColor(QPalette::Window, m_color);
+29:eea282a1 (jward67 2022-04-05 17:51:00 -0400 29)     ui->displayWidget->setPalette(pal);
+30:eea282a1 (jward67 2022-04-05 17:51:00 -0400 30)     emit colorChanged(m_color);
+31:eea282a1 (jward67 2022-04-05 17:51:00 -0400 31) }
+
+"colorselect.h"
+1:eea282a1 (jward67 2022-04-05 17:51:00 -0400  1) //
+2:eea282a1 (jward67 2022-04-05 17:51:00 -0400  2) // Created by Miroslav Bendik on Dec 19, 2012
+3:eea282a1 (jward67 2022-04-05 17:51:00 -0400  3) //
+4:eea282a1 (jward67 2022-04-05 17:51:00 -0400  4) #ifndef COLORSELECT_H
+5:eea282a1 (jward67 2022-04-05 17:51:00 -0400  5) #define COLORSELECT_H
+6:eea282a1 (jward67 2022-04-05 17:51:00 -0400  6) 
+7:eea282a1 (jward67 2022-04-05 17:51:00 -0400  7) #include <QWidget>
+8:eea282a1 (jward67 2022-04-05 17:51:00 -0400  8) #include <QColor>
+9:eea282a1 (jward67 2022-04-05 17:51:00 -0400  9) 
+10:eea282a1 (jward67 2022-04-05 17:51:00 -0400 10) namespace Ui {
+11:eea282a1 (jward67 2022-04-05 17:51:00 -0400 11) class ColorSelect;
+12:eea282a1 (jward67 2022-04-05 17:51:00 -0400 12) }
+13:eea282a1 (jward67 2022-04-05 17:51:00 -0400 13) 
+14:eea282a1 (jward67 2022-04-05 17:51:00 -0400 14) class ColorSelect : public QWidget
+15:eea282a1 (jward67 2022-04-05 17:51:00 -0400 15) {
+16:eea282a1 (jward67 2022-04-05 17:51:00 -0400 16)     Q_OBJECT
+17:eea282a1 (jward67 2022-04-05 17:51:00 -0400 17)     Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
+18:eea282a1 (jward67 2022-04-05 17:51:00 -0400 18) 
+19:eea282a1 (jward67 2022-04-05 17:51:00 -0400 19) public:
+20:eea282a1 (jward67 2022-04-05 17:51:00 -0400 20)     explicit ColorSelect(QWidget *parent = nullptr);
+21:eea282a1 (jward67 2022-04-05 17:51:00 -0400 21)     ~ColorSelect();
+22:eea282a1 (jward67 2022-04-05 17:51:00 -0400 22) 
+23:eea282a1 (jward67 2022-04-05 17:51:00 -0400 23)     QColor color() const
+24:eea282a1 (jward67 2022-04-05 17:51:00 -0400 24)     {
+25:eea282a1 (jward67 2022-04-05 17:51:00 -0400 25)         return m_color;
+26:eea282a1 (jward67 2022-04-05 17:51:00 -0400 26)     }
+27:eea282a1 (jward67 2022-04-05 17:51:00 -0400 27) 
+28:eea282a1 (jward67 2022-04-05 17:51:00 -0400 28) signals:
+29:eea282a1 (jward67 2022-04-05 17:51:00 -0400 29)     void colorChanged(QColor arg);
+30:eea282a1 (jward67 2022-04-05 17:51:00 -0400 30) 
+31:eea282a1 (jward67 2022-04-05 17:51:00 -0400 31) private slots:
+32:eea282a1 (jward67 2022-04-05 17:51:00 -0400 32)     void onColorChanged();
+33:eea282a1 (jward67 2022-04-05 17:51:00 -0400 33) 
+34:eea282a1 (jward67 2022-04-05 17:51:00 -0400 34) private:
+35:eea282a1 (jward67 2022-04-05 17:51:00 -0400 35)     Ui::ColorSelect *ui;
+36:eea282a1 (jward67 2022-04-05 17:51:00 -0400 36)     QColor m_color;
+37:eea282a1 (jward67 2022-04-05 17:51:00 -0400 37) };
+38:eea282a1 (jward67 2022-04-05 17:51:00 -0400 38) 
+39:eea282a1 (jward67 2022-04-05 17:51:00 -0400 39) #endif // COLORSELECT_H
+40:eea282a1 (jward67 2022-04-05 17:51:00 -0400 40) 

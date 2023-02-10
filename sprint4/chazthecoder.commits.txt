@@ -1,0 +1,576 @@
+scribblearea.h
+35:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 35)     bool fill_mode;
+36:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 36)     bool line_mode;
+37:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 37)     bool shape_drawn;
+38:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 38)     bool pickingColor;
+39:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 39)     void createShape(QMouseEvent *event);
+52:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 52)     void resetImageSize(QImage *image);
+53:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 53)     void inputResize(QSize newSize); 
+63:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 63)     
+64:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 64)     QString shape;
+80:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 80)     void resizeImage(QImage *image, const QSize &newSize); 
+81:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 81)     void resize_Event(); 
+84:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 84)     bool line_drawn;
+
+scribblearea.cpp
+23:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400  23)     line_mode = false;
+24:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400  24)     fill_mode = false;
+25:920434de (Payton Chaz Creech 2022-04-25 21:42:21 -0400  25)     line_drawn = false;
+26:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  26)     shape_drawn = false;
+27:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  27)     shapeSelected = false;
+35:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400  35)     resize_Event();
+73:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  73) void ScribbleArea::createShape(QMouseEvent *event) {
+75:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  75)     QColor tmp;
+76:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  76)     if ((event->buttons() & Qt::LeftButton))
+77:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  77)     {
+78:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  78)         tmp = penColor();
+79:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  79)     }
+80:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  80)     else
+81:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  81)     {
+82:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  82)         tmp = rightPenColor();
+83:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  83)     }
+84:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  84)     if (shape_drawn) {
+85:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  85)         if (!(lastPoint == event->pos()))
+86:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  86)         {
+87:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  87)             undoCall();
+88:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  88)         }
+89:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  89)     }
+90:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  90) 
+91:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  91)     QPainter shape_image (&image);
+92:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  92)     shape_image.setPen(QPen(tmp, myPenWidth, Qt::SolidLine,
+93:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  93)                          Qt::FlatCap, Qt::BevelJoin));
+94:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  94) 
+95:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  95)     if (QString::compare(shape, "Circle/Oval") == 0)
+96:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  96)     {
+97:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  97)         QRect rectangle(lastPoint, event->pos());
+98:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  98)         shape_image.drawEllipse(rectangle);
+99:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400  99)         shape_drawn = true;
+100:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 100)     }
+101:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 101)     else if (QString::compare(shape, "Semi-circle/oval") == 0)
+102:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 102)     {
+103:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 103)         if (lastPoint.y() >= event->pos().y())
+104:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 104)         {
+105:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 105)             QRectF rectangle(lastPoint, event->pos());
+106:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 106)             int start_angle = 0;
+107:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 107)             int span_angle = 180 * 16;
+108:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 108)             shape_image.drawPie(rectangle, start_angle, span_angle);
+109:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 109)             shape_drawn = true;
+110:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 110)         }
+111:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 111)         else
+112:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 112)         {
+113:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 113)             QRectF rectangle(lastPoint, event->pos());
+114:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 114)             int start_angle = 180 * 16;
+115:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 115)             int span_angle = 180 * 16;
+116:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 116)             shape_image.drawPie(rectangle, start_angle, span_angle);
+117:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 117)             shape_drawn = true;
+118:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 118)         }
+119:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 119)     }
+120:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 120)     else if (QString::compare(shape, "Quarter-circle/oval") == 0)
+121:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 121)     {
+122:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 122)         if (event->pos().x() >= lastPoint.x() && event->pos().y() >= lastPoint.y())
+123:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 123)         {
+124:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 124)             QRectF rectangle(lastPoint, event->pos());
+125:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 125)             int start_angle = 270 * 16;
+126:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 126)             int span_angle = 90 * 16;
+127:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 127)             shape_image.drawPie(rectangle, start_angle, span_angle);
+128:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 128)             shape_drawn = true;
+129:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 129)         }
+130:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 130)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() <= lastPoint.y())
+131:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 131)         {
+132:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 132)             QRectF rectangle(lastPoint, event->pos());
+133:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 133)             int start_angle = 90 * 16;
+134:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 134)             int span_angle = 90 * 16;
+135:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 135)             shape_image.drawPie(rectangle, start_angle, span_angle);
+136:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 136)             shape_drawn = true;
+137:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 137)         }
+138:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 138)         else if (event->pos().x() >= lastPoint.x() && event->pos().y() <= lastPoint.y())
+139:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 139)         {
+140:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 140)             QRectF rectangle(lastPoint, event->pos());
+141:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 141)             int start_angle = 0;
+142:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 142)             int span_angle = 90 * 16;
+143:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 143)             shape_image.drawPie(rectangle, start_angle, span_angle);
+144:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 144)             shape_drawn = true;
+145:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 145)         }
+146:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 146)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() >= lastPoint.y())
+147:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 147)         {
+148:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 148)             QRectF rectangle(lastPoint, event->pos());
+149:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 149)             int start_angle = 180 * 16;
+150:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 150)             int span_angle = 90 * 16;
+151:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 151)             shape_image.drawPie(rectangle, start_angle, span_angle);
+152:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 152)             shape_drawn = true;
+153:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 153)         }
+154:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 154)     }
+155:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 155)     else if (QString::compare(shape, "Square/Rect") == 0)
+156:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 156)     {
+157:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 157)         QRect rectangle(lastPoint, event->pos());
+158:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 158)         shape_image.drawRect(rectangle);
+159:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 159)         shape_drawn = true;
+160:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 160)     }
+161:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 161)     else if (QString::compare(shape, "Triangle") == 0)
+162:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 162)     {
+163:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 163)         QPolygon poly;
+164:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 164)         poly << QPoint ((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+165:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 165)         poly << QPoint (lastPoint.x(), event->pos().y());
+166:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 166)         poly << event->pos();
+167:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 167)         shape_image.drawPolygon(poly);
+168:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 168)         shape_drawn = true;
+169:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 169)     }
+170:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 170)     else if (QString::compare(shape, "Right-angled triangle") == 0)
+171:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 171)     {
+172:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 172)         QPolygon poly;
+173:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 173)         poly << lastPoint;
+174:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 174)         poly << QPoint (lastPoint.x(), event->pos().y());
+175:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 175)         poly << event->pos();
+176:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 176)         shape_image.drawPolygon(poly);
+177:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 177)         shape_drawn = true;
+178:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 178)     }
+179:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 179)     else if (QString::compare(shape, "Rhombus") == 0)
+180:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 180)     {
+181:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 181)         QPolygon poly;
+182:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 182)         poly << QPoint((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+183:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 183)         poly << QPoint(event->pos().x(), (lastPoint.y() + event->pos().y())/2);
+184:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 184)         poly << QPoint((lastPoint.x() + event->pos().x())/2, event->pos().y());
+185:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 185)         poly << QPoint(lastPoint.x(), (lastPoint.y() + event->pos().y())/2);
+186:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 186)         shape_image.drawPolygon(poly);
+187:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 187)         shape_drawn = true;
+188:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 188)     }
+189:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 189)     else if (QString::compare(shape, "Pentagon") == 0)
+190:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 190)     {
+191:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 191)         QPolygonF poly;
+192:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 192)         if (event->pos().x() >= lastPoint.x() && event->pos().y() >= lastPoint.y()){
+193:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 193)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+194:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 194)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.40)));
+195:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 195)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.80)), event->pos().y());
+196:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 196)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.20)), event->pos().y());
+197:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 197)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.40)));
+198:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 198)         }
+199:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 199)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() <= lastPoint.y())
+200:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 200)         {
+201:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 201)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+202:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 202)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.40)));
+203:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 203)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.80)), event->pos().y());
+204:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 204)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.20)), event->pos().y());
+205:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 205)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.40)));
+206:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 206)         }
+207:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 207)         else if (event->pos().x() >= lastPoint.x() && event->pos().y() <= lastPoint.y())
+208:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 208)         {
+209:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 209)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+210:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 210)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.40)));
+211:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 211)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.80)), event->pos().y());
+212:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 212)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.20)), event->pos().y());
+213:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 213)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.40)));
+214:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 214)         }
+215:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 215)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() >= lastPoint.y())
+216:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 216)         {
+217:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 217)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+218:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 218)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.40)));
+219:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 219)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.80)), event->pos().y());
+220:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 220)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.20)), event->pos().y());
+221:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 221)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.40)));
+222:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 222)         }
+223:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 223)         shape_image.drawPolygon(poly);
+224:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 224)         shape_drawn = true;
+225:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 225)     }
+226:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 226)     else if (QString::compare(shape, "Hexagon") == 0)
+227:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 227)     {
+228:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 228)         QPolygonF poly;
+229:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 229)         if (event->pos().x() >= lastPoint.x() && event->pos().y() >= lastPoint.y()){
+230:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 230)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.25)), lastPoint.y());
+231:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 231)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.75)), lastPoint.y());
+232:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 232)             poly << QPointF(event->pos().x(), (lastPoint.y() + event->pos().y())/2);
+233:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 233)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.75)), event->pos().y());
+234:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 234)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.25)), event->pos().y());
+235:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 235)             poly << QPointF(lastPoint.x(), (lastPoint.y() + event->pos().y())/2);
+236:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 236)         }
+237:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 237)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() <= lastPoint.y())
+238:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 238)         {
+239:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 239)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.25)), lastPoint.y());
+240:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 240)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.75)), lastPoint.y());
+241:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 241)             poly << QPointF(event->pos().x(), (lastPoint.y() + event->pos().y())/2);
+242:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 242)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.75)), event->pos().y());
+243:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 243)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.25)), event->pos().y());
+244:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 244)             poly << QPointF(lastPoint.x(), (lastPoint.y() + event->pos().y())/2);
+245:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 245)         }
+246:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 246)         else if (event->pos().x() >= lastPoint.x() && event->pos().y() <= lastPoint.y())
+247:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 247)         {
+248:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 248)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.25)), lastPoint.y());
+249:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 249)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.75)), lastPoint.y());
+250:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 250)             poly << QPointF(event->pos().x(), (lastPoint.y() + event->pos().y())/2);
+251:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 251)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.75)), event->pos().y());
+252:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 252)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.25)), event->pos().y());
+253:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 253)             poly << QPointF(lastPoint.x(), (lastPoint.y() + event->pos().y())/2);
+254:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 254)         }
+255:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 255)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() >= lastPoint.y())
+256:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 256)         {
+257:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 257)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.25)), lastPoint.y());
+258:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 258)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.75)), lastPoint.y());
+259:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 259)             poly << QPointF(event->pos().x(), (lastPoint.y() + event->pos().y())/2);
+260:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 260)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.75)), event->pos().y());
+261:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 261)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.25)), event->pos().y());
+262:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 262)             poly << QPointF(lastPoint.x(), (lastPoint.y() + event->pos().y())/2);
+263:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 263)         }
+264:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 264)         shape_image.drawPolygon(poly);
+265:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 265)         shape_drawn = true;
+266:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 266)     }
+267:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 267)     else if (QString::compare(shape, "Heptagon") == 0)
+268:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 268)     {
+269:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 269)         QPolygonF poly;
+270:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 270)         if (event->pos().x() >= lastPoint.x() && event->pos().y() >= lastPoint.y()){
+271:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 271)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+272:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 272)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.9375)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+273:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 273)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+274:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 274)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.705)), event->pos().y());
+275:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 275)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.29)), event->pos().y());
+276:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 276)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+277:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 277)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.0625)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+278:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 278)         }
+279:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 279)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() <= lastPoint.y())
+280:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 280)         {
+281:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 281)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+282:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 282)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.9375)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+283:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 283)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+284:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 284)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.705)), event->pos().y());
+285:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 285)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.29)), event->pos().y());
+286:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 286)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+287:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 287)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.0625)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+288:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 288)         }
+289:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 289)         else if (event->pos().x() >= lastPoint.x() && event->pos().y() <= lastPoint.y())
+290:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 290)         {
+291:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 291)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+292:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 292)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.9375)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+293:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 293)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+294:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 294)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.705)), event->pos().y());
+295:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 295)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.29)), event->pos().y());
+296:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 296)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+297:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 297)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.0625)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+298:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 298)         }
+299:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 299)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() >= lastPoint.y())
+300:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 300)         {
+301:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 301)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+302:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 302)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.9375)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+303:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 303)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+304:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 304)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.705)), event->pos().y());
+305:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 305)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.29)), event->pos().y());
+306:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 306)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+307:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 307)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.0625)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+308:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 308)         }
+309:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 309)         shape_image.drawPolygon(poly);
+310:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 310)         shape_drawn = true;
+311:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 311)     }
+312:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 312)     else if (QString::compare(shape, "Octagon") == 0)
+313:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 313)     {
+314:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 314)         QPolygonF poly;
+315:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 315)         if (event->pos().x() >= lastPoint.x() && event->pos().y() >= lastPoint.y()){
+316:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 316)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.29)), lastPoint.y());
+317:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 317)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.71)), lastPoint.y());
+318:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 318)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.29)));
+319:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 319)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.71)));
+320:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 320)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.71)), event->pos().y());
+321:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 321)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.29)), event->pos().y());
+322:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 322)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.71)));
+323:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 323)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.29)));
+324:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 324)         }
+325:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 325)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() <= lastPoint.y())
+326:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 326)         {
+327:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 327)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.29)), lastPoint.y());
+328:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 328)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.71)), lastPoint.y());
+329:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 329)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.29)));
+330:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 330)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.71)));
+331:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 331)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.71)), event->pos().y());
+332:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 332)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.29)), event->pos().y());
+333:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 333)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.71)));
+334:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 334)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.29)));
+335:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 335)         }
+336:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 336)         else if (event->pos().x() >= lastPoint.x() && event->pos().y() <= lastPoint.y())
+337:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 337)         {
+338:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 338)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.29)), lastPoint.y());
+339:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 339)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.71)), lastPoint.y());
+340:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 340)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.29)));
+341:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 341)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.71)));
+342:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 342)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.71)), event->pos().y());
+343:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 343)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.29)), event->pos().y());
+344:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 344)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.71)));
+345:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 345)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.29)));
+346:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 346)         }
+347:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 347)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() >= lastPoint.y())
+348:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 348)         {
+349:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 349)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.25)), lastPoint.y());
+350:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 350)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.75)), lastPoint.y());
+351:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 351)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+352:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 352)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.75)));
+353:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 353)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.75)), event->pos().y());
+354:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 354)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.25)), event->pos().y());
+355:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 355)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.75)));
+356:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 356)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.25)));
+357:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 357)         }
+358:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 358)         shape_image.drawPolygon(poly);
+359:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 359)         shape_drawn = true;
+360:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 360)     }
+361:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 361)     else if (QString::compare(shape, "Cross") == 0)
+362:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 362)     {
+363:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 363)         QPolygonF poly;
+364:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 364)         if (event->pos().x() >= lastPoint.x() && event->pos().y() >= lastPoint.y())
+365:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 365)         {
+366:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 366)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.33)), lastPoint.y());
+367:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 367)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.67)), lastPoint.y());
+368:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 368)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.67)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+369:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 369)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+370:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 370)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+371:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 371)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.67)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+372:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 372)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.67)), event->pos().y());
+373:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 373)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.33)), event->pos().y());
+374:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 374)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.33)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+375:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 375)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+376:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 376)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+377:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 377)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.33)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+378:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 378)         }
+379:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 379)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() <= lastPoint.y())
+380:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 380)         {
+381:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 381)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.33)), lastPoint.y());
+382:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 382)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.67)), lastPoint.y());
+383:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 383)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.67)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+384:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 384)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+385:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 385)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+386:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 386)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.67)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+387:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 387)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.67)), event->pos().y());
+388:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 388)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.33)), event->pos().y());
+389:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 389)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.33)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+390:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 390)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+391:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 391)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+392:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 392)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.33)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+393:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 393)         }
+394:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 394)         else if (event->pos().x() >= lastPoint.x() && event->pos().y() <= lastPoint.y())
+395:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 395)         {
+396:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 396)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.33)), lastPoint.y());
+397:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 397)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.67)), lastPoint.y());
+398:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 398)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.67)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+399:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 399)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+400:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 400)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+401:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 401)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.67)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+402:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 402)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.67)), event->pos().y());
+403:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 403)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.33)), event->pos().y());
+404:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 404)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.33)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+405:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 405)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+406:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 406)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+407:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 407)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.33)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+408:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 408)         }
+409:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 409)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() >= lastPoint.y())
+410:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 410)         {
+411:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 411)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.33)), lastPoint.y());
+412:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 412)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.67)), lastPoint.y());
+413:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 413)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.67)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+414:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 414)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+415:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 415)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+416:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 416)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.67)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+417:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 417)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.67)), event->pos().y());
+418:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 418)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.33)), event->pos().y());
+419:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 419)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.33)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+420:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 420)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.67)));
+421:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 421)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+422:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 422)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.33)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.33)));
+423:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 423)         }
+424:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 424)         shape_image.drawPolygon(poly);
+425:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 425)         shape_drawn = true;
+426:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 426)     }
+427:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 427)     else if (QString::compare(shape, "Star") == 0)
+428:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 428)     {
+429:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 429)         QPolygonF poly;
+430:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 430)         if (event->pos().x() >= lastPoint.x() && event->pos().y() >= lastPoint.y())
+431:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 431)         {
+432:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 432)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+433:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 433)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.65)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+434:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 434)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+435:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 435)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.70)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.60)));
+436:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 436)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.80)), event->pos().y());
+437:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 437)             poly << QPointF((lastPoint.x() + event->pos().x())/2, (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.75)));
+438:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 438)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.20)), event->pos().y());
+439:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 439)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.30)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.60)));
+440:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 440)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+441:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 441)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.35)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+442:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 442)         }
+443:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 443)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() <= lastPoint.y())
+444:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 444)         {
+445:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 445)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+446:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 446)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.65)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+447:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 447)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+448:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 448)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.70)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.60)));
+449:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 449)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.80)), event->pos().y());
+450:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 450)             poly << QPointF((lastPoint.x() + event->pos().x())/2, (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.75)));
+451:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 451)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.20)), event->pos().y());
+452:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 452)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.30)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.60)));
+453:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 453)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+454:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 454)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.35)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+455:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 455)         }
+456:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 456)         else if (event->pos().x() <= lastPoint.x() && event->pos().y() >= lastPoint.y())
+457:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 457)         {
+458:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 458)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+459:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 459)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.65)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+460:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 460)             poly << QPointF(event->pos().x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+461:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 461)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.70)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.60)));
+462:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 462)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.80)), event->pos().y());
+463:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 463)             poly << QPointF((lastPoint.x() + event->pos().x())/2, (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.75)));
+464:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 464)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.20)), event->pos().y());
+465:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 465)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.30)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.60)));
+466:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 466)             poly << QPointF(lastPoint.x(), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+467:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 467)             poly << QPointF((lastPoint.x() - (std::abs(lastPoint.x() - event->pos().x())*0.35)), (lastPoint.y() + (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+468:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 468)         }
+469:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 469)         else if (event->pos().x() >= lastPoint.x() && event->pos().y() <= lastPoint.y())
+470:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 470)         {
+471:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 471)             poly << QPointF((lastPoint.x() + event->pos().x())/2, lastPoint.y());
+472:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 472)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.65)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+473:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 473)             poly << QPointF(event->pos().x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+474:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 474)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.70)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.60)));
+475:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 475)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.80)), event->pos().y());
+476:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 476)             poly << QPointF((lastPoint.x() + event->pos().x())/2, (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.75)));
+477:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 477)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.20)), event->pos().y());
+478:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 478)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.30)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.60)));
+479:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 479)             poly << QPointF(lastPoint.x(), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+480:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 480)             poly << QPointF((lastPoint.x() + (std::abs(lastPoint.x() - event->pos().x())*0.35)), (lastPoint.y() - (std::abs(lastPoint.y() - event->pos().y())*0.35)));
+481:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 481)         }
+482:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 482)         shape_image.drawPolygon(poly);
+483:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 483)         shape_drawn = true;
+484:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 484)     }
+485:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 485) 
+486:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 486)     modified = true;
+487:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 487)     int rad = (myPenWidth / 2) + 2;
+488:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 488)     ustack.push_back(image);
+489:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 489)     ustack.push_back(image);
+490:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 490)     shape_image.end();
+491:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 491)     update(QRect(lastPoint, event->pos()).normalized().adjusted(-rad, -rad, +rad, +rad));
+549:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 549)     if (shapeSelected) {
+550:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 550)         lastPoint = event->pos();
+551:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 551)     }
+558:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 558)     if((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) && !(line_mode) && !(fill_mode) && !(shapeSelected)) {
+570:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 570)     else if ((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) && (fill_mode))
+571:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 571)     {
+572:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 572)         lastPoint = event->pos();
+573:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 573) 
+574:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 574)         QColor newColor;
+575:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 575)         newColor = getImage().pixelColor(getPosition());
+576:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 576) 
+577:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 577)         QColor tmp;
+578:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 578)         if(event->button() == Qt::LeftButton) {
+579:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 579)             tmp = penColor();
+580:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 580)         }
+581:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 581)         else {
+582:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 582)             tmp = rightPenColor();
+583:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 583)         }
+584:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 584) 
+585:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 585)         QPainter painter(&image);
+586:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 586)         painter.setPen(tmp);
+587:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 587) 
+588:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 588)         QBrush brush;
+589:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 589)         brush.setColor(tmp);
+590:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 590)         brush.setStyle(Qt::SolidPattern);
+591:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 591)     }
+592:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 592)     else if ((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) && (line_mode))
+593:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 593)     {
+594:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 594)         lastPoint = event->pos();
+595:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 595) 
+596:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 596)         QColor tmp;
+597:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 597)         if(event->button() == Qt::LeftButton) {
+598:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 598)             tmp = penColor();
+599:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 599)         }
+600:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 600)         else {
+601:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 601)             tmp = rightPenColor();
+602:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 602)         }
+603:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 603) 
+604:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 604)         QPainter line(&image);
+605:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 605)     }
+645:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 645)         shape_drawn = false;
+646:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 646)         shapeSelected = false;
+659:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 659)         line_drawn = false;
+660:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 660)     }
+670:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 670) void ScribbleArea::resize_Event() { 
+671:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 671) 
+672:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 672)     int newWidth = 1550; 
+673:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 673)     int newHeight = 800; 
+674:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 674)     resizeImage(&image, QSize(newWidth, newHeight)); 
+675:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 675)     update(); 
+676:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 676) 
+677:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 677) } 
+685:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 685) void ScribbleArea::inputResize(QSize newSize) 
+686:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 686) {
+687:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 687)     resizeImage(&image, newSize);
+688:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 688)     update();
+689:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 689) } 
+690:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 690) 
+723:fe1b2cb4 (Payton Chaz Creech 2022-04-25 21:57:07 -0400 723)     ustack.push_back(*image);
+724:fe1b2cb4 (Payton Chaz Creech 2022-04-25 21:57:07 -0400 724)     ustack.push_back(*image);
+
+misc_paint.cpp
+30:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400  30)     
+31:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400  31)     
+32:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400  32)     imageLabel = new QLabel; 
+33:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400  33)     scrollArea = new QScrollArea; 
+131:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 131)     scribbleArea->line_mode = false;
+132:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 132)     scribbleArea->shapeSelected = true;
+133:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 133)     QStringList items;
+134:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 134)     items << tr("Circle/Oval") << tr("Semi-circle/oval") << tr("Quarter-circle/oval")
+135:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 135)           << tr("Square/Rect") << tr("Triangle") << tr("Right-angled triangle")
+136:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 136)           << tr("Rhombus") << tr("Pentagon") << tr("Hexagon") << tr("Heptagon")
+137:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 137)           << tr("Octagon") << tr("Cross") << tr("Star");
+138:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 138)     bool ok;
+139:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 139)     scribbleArea->shape = QInputDialog::getItem(this, tr("Choose a shape"),
+140:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 140)                                                 tr("Shape:"), items, 0, false, &ok);
+297:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 297)     
+298:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 298)     resizeAct = new QAction(tr("Resize Canvas"), this); 
+299:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 299)     connect(resizeAct, SIGNAL(triggered()), this, SLOT(resizeCanvas())); 
+318:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 318)     optionMenu->addAction(resizeAct); 
+397:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 397)     shapeToolButton->setText("Shape");
+398:3ac9af26 (Payton Chaz Creech 2022-05-02 18:36:55 -0400 398)     shapeToolButton->setFixedWidth(60);
+407:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 407)     //line tool
+408:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 408)     lineToolButton = new QPushButton();
+409:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 409)     lineToolButton->setText("Line");
+410:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 410)     lineToolButton->setFixedWidth(40);
+411:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 411)     connect(lineToolButton, SIGNAL(pressed()), this, SLOT(line_tool()));
+412:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 412)     
+466:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 466)     grid2->addWidget(lineToolButton, 0, 1);
+504:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 504) void Misc_Paint::fill_tool()
+505:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 505) {
+506:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 506)     if (scribbleArea->fill_mode == true)
+507:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 507)     {
+508:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 508)         scribbleArea->fill_mode = false;
+509:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 509)     }
+510:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 510)     else
+511:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 511)     {
+512:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 512)         scribbleArea->fill_mode = true;
+513:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 513)         scribbleArea->line_mode = false;
+514:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 514)     }
+515:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 515) 
+516:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 516) }
+517:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 517) 
+526:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 526) void Misc_Paint::line_tool()
+527:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 527) {
+528:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 528)     if (scribbleArea->line_mode == true)
+529:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 529)     {
+530:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 530)         scribbleArea->line_mode = false;
+531:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 531)     }
+532:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 532)     else
+533:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 533)     {
+534:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 534)         scribbleArea->line_mode = true;
+535:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 535)         scribbleArea->fill_mode = false;
+536:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 536)     }
+537:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 537) }
+538:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 538) 
+539:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 539) void Misc_Paint::resizeCanvas() 
+540:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 540) { 
+542:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 542)     bool ok; 
+543:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 543)     int newWidth = QInputDialog::getInt(this, tr("Resize Width"),
+544:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 544)                                         tr("Select canvas width (in pixels) : "),
+545:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 545)                                         width(), 1, 1550, 1, &ok); 
+546:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 546)     int newHeight = QInputDialog::getInt(this, tr("Resize Height"),
+547:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 547)                                          tr("Select canvas height (in pixels) : "),
+548:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 548)                                          height(), 1, 800, 1, &ok); 
+549:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 549)     scribbleArea->inputResize(QSize(newWidth, newHeight)); 
+550:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 550)     imageLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); 
+551:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 551)     scrollArea->setWidget(imageLabel); 
+552:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 552)     scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); 
+553:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 553) } 
+
+misc_paint.h
+68:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400  68)     void fill_tool();
+69:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400  69)     void line_tool();
+70:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400  70)     void resizeCanvas(); 
+101:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 101)                 *shapeToolButton, *selectToolButton, *lineToolButton;
+128:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 128)     QAction *resizeAct;

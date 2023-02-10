@@ -1,0 +1,12 @@
+The following links contains youtube videos which we used to create our base application for Paint App as well as any additional 
+custom widgets which we've implemented:
+
+Base code for Paint App by Derek Banas (July 23, 2018 thru July 26, 2018), who referred to an example on Qt Creator for a Scribble application 
+(Scribble Example: https://doc.qt.io/qt-6/qtwidgets-widgets-scribble-example.html):
+- Qt Tutorial 4: C++ Paint App --> https://youtu.be/uzgU2XzhnHY
+- Qt Tutorial 5: Finish Paint App --> https://youtu.be/F-ha0F2yLqA
+
+RGB Color Picker Widget design by Miroslav Bendik on Dec 19, 2012:
+- Creating color picker in Qt Creator / Vytvorenie editora farby v Qt Creatore --> https://youtu.be/mZ7wBUA04CI
+
+All classes and widgets used were provided by the Qt Creator software developer application. 

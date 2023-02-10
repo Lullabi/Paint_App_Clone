@@ -1,0 +1,100 @@
+randompoint.cpp :
+97b77866 (leoked 2022-04-21 02:03:10 -0400  1) #include "randompoint.h"
+97b77866 (leoked 2022-04-21 02:03:10 -0400  2) 
+97b77866 (leoked 2022-04-21 02:03:10 -0400  3) randomPoint::randomPoint(int x1, int y1)
+97b77866 (leoked 2022-04-21 02:03:10 -0400  4) {
+97b77866 (leoked 2022-04-21 02:03:10 -0400  5)     srand(time(NULL));
+97b77866 (leoked 2022-04-21 02:03:10 -0400  6)     radius = 30;
+97b77866 (leoked 2022-04-21 02:03:10 -0400  7)     x = x1;
+97b77866 (leoked 2022-04-21 02:03:10 -0400  8)     y = y1;
+97b77866 (leoked 2022-04-21 02:03:10 -0400  9) }
+97b77866 (leoked 2022-04-21 02:03:10 -0400 10) 
+97b77866 (leoked 2022-04-21 02:03:10 -0400 11) double randomPoint::uniform()
+97b77866 (leoked 2022-04-21 02:03:10 -0400 12) {
+97b77866 (leoked 2022-04-21 02:03:10 -0400 13)     return (double)rand() / RAND_MAX;
+97b77866 (leoked 2022-04-21 02:03:10 -0400 14) }
+97b77866 (leoked 2022-04-21 02:03:10 -0400 15) 
+97b77866 (leoked 2022-04-21 02:03:10 -0400 16) vector<int> randomPoint::rPoint() {
+97b77866 (leoked 2022-04-21 02:03:10 -0400 17)     double theta =  2 * 3.14159265358979323846264 * uniform();
+97b77866 (leoked 2022-04-21 02:03:10 -0400 18)     double r = sqrt(uniform());
+97b77866 (leoked 2022-04-21 02:03:10 -0400 19)     int ranX = x + r * radius * cos(theta);
+97b77866 (leoked 2022-04-21 02:03:10 -0400 20)     int ranY = y + r * radius * sin(theta);
+97b77866 (leoked 2022-04-21 02:03:10 -0400 21)     return vector<int>{ranX,ranY};
+97b77866 (leoked 2022-04-21 02:03:10 -0400 22) }
+
+randompoint.h :
+97b77866 (leoked 2022-04-21 02:03:10 -0400  1) #ifndef RANDOMPOINT_H
+97b77866 (leoked 2022-04-21 02:03:10 -0400  2) #define RANDOMPOINT_H
+97b77866 (leoked 2022-04-21 02:03:10 -0400  3) #include <bits/stdc++.h>
+97b77866 (leoked 2022-04-21 02:03:10 -0400  4) using namespace std;
+97b77866 (leoked 2022-04-21 02:03:10 -0400  5) class randomPoint
+97b77866 (leoked 2022-04-21 02:03:10 -0400  6) {
+97b77866 (leoked 2022-04-21 02:03:10 -0400  7) public:
+97b77866 (leoked 2022-04-21 02:03:10 -0400  8)     const double PI = 3.14159265358979732384626433832795;
+97b77866 (leoked 2022-04-21 02:03:10 -0400  9)     int radius, x, y;
+97b77866 (leoked 2022-04-21 02:03:10 -0400 10)     randomPoint(int x1, int y1);
+97b77866 (leoked 2022-04-21 02:03:10 -0400 11)     vector<int> rPoint();
+97b77866 (leoked 2022-04-21 02:03:10 -0400 12)     double uniform();
+97b77866 (leoked 2022-04-21 02:03:10 -0400 13) };
+97b77866 (leoked 2022-04-21 02:03:10 -0400 14) 
+97b77866 (leoked 2022-04-21 02:03:10 -0400 15) #endif // RANDOMPOINT_H
+
+misc_paint.cpp :
+884af643 (leoked             2022-04-20 14:36:08 -0400  91)     if (buttonColor.isValid() && scribbleArea->getChangedColor()) {
+884af643 (leoked             2022-04-20 14:36:08 -0400  92)         scribbleArea->setRightPenColor(buttonColor);
+884af643 (leoked             2022-04-20 14:36:08 -0400  93)     }
+884af643 (leoked             2022-04-20 14:36:08 -0400  94)     else {
+884af643 (leoked             2022-04-20 14:36:08 -0400  99) void Misc_Paint::setColorMode1() {
+884af643 (leoked             2022-04-20 14:36:08 -0400 100)     scribbleArea->setChangedColor(0);
+884af643 (leoked             2022-04-20 14:36:08 -0400 101) }
+884af643 (leoked             2022-04-20 14:36:08 -0400 102) 
+884af643 (leoked             2022-04-20 14:36:08 -0400 103) void Misc_Paint::setColorMode2() {
+884af643 (leoked             2022-04-20 14:36:08 -0400 104)     scribbleArea->setChangedColor(1);
+884af643 (leoked             2022-04-20 14:36:08 -0400 105) }
+884af643 (leoked             2022-04-20 14:36:08 -0400 106) 
+2a643292 (leoked             2022-04-20 13:24:07 -0400 140)     scribbleArea->setMode(1);
+884af643 (leoked             2022-04-20 14:36:08 -0400 146) 
+884af643 (leoked             2022-04-20 14:36:08 -0400 406)     colorOne->setText("C1");
+884af643 (leoked             2022-04-20 14:36:08 -0400 408)     connect(colorOne, SIGNAL(pressed()), this, SLOT(setColorMode1()));
+884af643 (leoked             2022-04-20 14:36:08 -0400 410) 
+884af643 (leoked             2022-04-20 14:36:08 -0400 413)     colorTwo->setText("C2");
+884af643 (leoked             2022-04-20 14:36:08 -0400 415)     connect(colorTwo, SIGNAL(pressed()), this, SLOT(setColorMode2()));
+884af643 (leoked             2022-04-20 14:36:08 -0400 417) 
+
+misc_paint.h :
+884af643 (leoked             2022-04-20 14:36:08 -0400  75)     void setColorMode1();
+884af643 (leoked             2022-04-20 14:36:08 -0400  76)     void setColorMode2();
+
+scribblearea.cpp :
+884af643 (leoked             2022-04-20 14:36:08 -0400  25)     myRightPenColor = QColor(255, 0, 0);
+2a643292 (leoked             2022-04-20 13:24:07 -0400  26)     mode = 0;
+2a643292 (leoked             2022-04-20 13:24:07 -0400  74)             drawLineTo(tempPoint, lastColor);
+2a643292 (leoked             2022-04-20 13:24:07 -0400  77)     setMode(0);
+884af643 (leoked             2022-04-20 14:36:08 -0400  97) void ScribbleArea::setRightPenColor(const QColor &newColor) {
+884af643 (leoked             2022-04-20 14:36:08 -0400  98)     myRightPenColor = newColor;
+884af643 (leoked             2022-04-20 14:36:08 -0400  99) }
+884af643 (leoked             2022-04-20 14:36:08 -0400 100) 
+884af643 (leoked             2022-04-20 14:36:08 -0400 105) void ScribbleArea::setChangedColor(int c) {
+884af643 (leoked             2022-04-20 14:36:08 -0400 106)     colorSelecter = c;
+884af643 (leoked             2022-04-20 14:36:08 -0400 107) }
+884af643 (leoked             2022-04-20 14:36:08 -0400 108) 
+2a643292 (leoked             2022-04-20 13:24:07 -0400 127)             lastColor = penColor();
+2a643292 (leoked             2022-04-20 13:24:07 -0400 130)             lastColor = rightPenColor();
+2a643292 (leoked             2022-04-20 13:24:07 -0400 133)         drawLineTo(event->pos(), lastColor);
+2a643292 (leoked             2022-04-20 13:24:07 -0400 142)     if (mode == 0) {
+2a643292 (leoked             2022-04-20 13:24:07 -0400 143)         if ((event->buttons() & Qt::LeftButton) && scribbling)
+2a643292 (leoked             2022-04-20 13:24:07 -0400 144)             drawLineTo(event->pos(), penColor());
+2a643292 (leoked             2022-04-20 13:24:07 -0400 146)         if ((event->buttons() & Qt::RightButton) && scribbling)
+2a643292 (leoked             2022-04-20 13:24:07 -0400 147)             drawLineTo(event->pos(), rightPenColor());
+2a643292 (leoked             2022-04-20 13:24:07 -0400 148)     }
+
+scribblearea.h :
+884af643 (leoked             2022-04-20 14:36:08 -0400 26)     void setRightPenColor(const QColor &newColor);
+2a643292 (leoked             2022-04-20 13:24:07 -0400 38)     void setMode(int x) { mode = x; }
+2a643292 (leoked             2022-04-20 13:24:07 -0400 42)     QColor getLastColor() const { return lastColor; }
+884af643 (leoked             2022-04-20 14:36:08 -0400 44)     void setChangedColor(int c);
+884af643 (leoked             2022-04-20 14:36:08 -0400 45)     int getChangedColor() const { return colorSelecter; }
+884af643 (leoked             2022-04-20 14:36:08 -0400 80)     QColor myRightPenColor;
+2a643292 (leoked             2022-04-20 13:24:07 -0400 85)     QColor lastColor;
+884af643 (leoked             2022-04-20 14:36:08 -0400 86)     int colorSelecter;
+2a643292 (leoked             2022-04-20 13:24:07 -0400 87)     int mode;

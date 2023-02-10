@@ -1,0 +1,78 @@
+
+7:49e571ee (Skyla   2022-03-28 23:13:29 -0400   7) #include <QString>
+8:49e571ee (Skyla   2022-03-28 23:13:29 -0400   8) #include <QVector>
+9:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400   9) #include <QPalette>
+10:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  10) #include <QDebug>
+11:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  11) #include <QSignalMapper>
+85:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400  85) void Misc_Paint::penColorButton() {
+86:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400  86)     QPushButton *button = (QPushButton *)sender();
+87:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400  87)     QColor buttonColor = button->palette().button().color();
+88:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400  88)     if (buttonColor.isValid()) {
+89:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400  89)         scribbleArea->setPenColor(buttonColor);
+90:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  90)     }
+91:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  91) }
+92:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  92) 
+
+235:6e4ddf6f (Skyla   2022-03-22 13:26:47 -0400 235)     connect(zoomInAct, SIGNAL(triggered()), this, SLOT(zoomIn()));
+239:6e4ddf6f (Skyla   2022-03-22 13:26:47 -0400 239)     connect(zoomOutAct, SIGNAL(triggered()), this, SLOT(zoomOut()));
+243:6e4ddf6f (Skyla   2022-03-22 13:26:47 -0400 243)     connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
+247:6e4ddf6f (Skyla   2022-03-22 13:26:47 -0400 247)     connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
+284:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 284) 
+285:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 285)     for (int i = 0; i < numButton; ++i) {
+286:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 286)         buttons[i] = new QPushButton();
+287:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 287)         colorPal[i] = buttons[i]->palette();
+288:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 288)     }
+289:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 289)     colorPal[0].setColor(QPalette::Button, QColor(Qt::red));
+290:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 290)     colorPal[1].setColor(QPalette::Button, QColor(Qt::blue));
+291:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 291)     colorPal[2].setColor(QPalette::Button, QColor(QColorConstants::Svg::mediumpurple));
+292:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 292)     colorPal[3].setColor(QPalette::Button, QColor(Qt::black));
+293:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 293)     colorPal[4].setColor(QPalette::Button, QColor(Qt::green));
+294:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 294)     colorPal[5].setColor(QPalette::Button, QColor(Qt::yellow));
+295:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 295)     colorPal[6].setColor(QPalette::Button, QColor(QColorConstants::Svg::aqua));
+296:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 296)     colorPal[7].setColor(QPalette::Button, QColor(QColorConstants::Svg::fuchsia));
+297:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 297)     colorPal[8].setColor(QPalette::Button, QColor(QColorConstants::Svg::saddlebrown));
+298:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 298)     colorPal[9].setColor(QPalette::Button, QColor(QColorConstants::Svg::darkgreen));
+299:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 299)     colorPal[10].setColor(QPalette::Button, QColor(QColorConstants::Svg::deepskyblue));
+300:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 300)     colorPal[11].setColor(QPalette::Button, QColor(QColorConstants::Svg::gray));
+301:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 301)     colorPal[12].setColor(QPalette::Button, QColor(QColorConstants::Svg::goldenrod));
+302:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 302)     colorPal[13].setColor(QPalette::Button, QColor(QColorConstants::Svg::lime));
+303:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 303)     colorPal[14].setColor(QPalette::Button, QColor(Qt::white));
+304:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 304)     colorPal[15].setColor(QPalette::Button, QColor(QColorConstants::Svg::orangered));
+305:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 305)     colorPal[16].setColor(QPalette::Button, QColor(QColorConstants::Svg::powderblue));
+306:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 306)     colorPal[17].setColor(QPalette::Button, QColor(QColorConstants::Svg::pink));
+307:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 307)     colorPal[18].setColor(QPalette::Button, QColor(QColorConstants::Svg::peru));
+308:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 308)     colorPal[19].setColor(QPalette::Button, QColor(QColorConstants::Svg::orange));
+309:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 309) 
+312:49e571ee (Skyla   2022-03-28 23:13:29 -0400 312) 
+313:49e571ee (Skyla   2022-03-28 23:13:29 -0400 313)     layout = new QHBoxLayout(scribbleArea);
+314:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 314)     //layout3 = new QGridLayout(scribbleArea);
+315:49e571ee (Skyla   2022-03-28 23:13:29 -0400 315) 
+322:49e571ee (Skyla   2022-03-28 23:13:29 -0400 322)     for (int i = 0; i < numButton; ++i) {
+323:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 323)         //buttons[i]->setStyleSheet("border-width: 1px; border-color: black; border-style: outset");
+324:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 324)         buttons[i]->setAutoFillBackground(true);
+325:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 325)         buttons[i]->setPalette(colorPal[i]);
+326:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 326)         buttons[i]->setFlat(true);
+327:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 327)         buttons[i]->setFixedWidth(20);
+328:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 328)         connect(buttons[i], SIGNAL(released()), this, SLOT(penColorButton()));
+329:49e571ee (Skyla   2022-03-28 23:13:29 -0400 329)         layout->addWidget(buttons[i]);
+330:49e571ee (Skyla   2022-03-28 23:13:29 -0400 330)     }
+331:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400 331) 
+338:49e571ee (Skyla   2022-03-28 23:13:29 -0400 338)     layout->setAlignment(Qt::AlignTop);
+
+21:49e571ee (Skyla   2022-03-28 23:13:29 -0400  21) #include <QHBoxLayout>
+22:49e571ee (Skyla   2022-03-28 23:13:29 -0400  22) #include <QGridLayout>
+23:49e571ee (Skyla   2022-03-28 23:13:29 -0400  23) #include <QPushButton>
+24:49e571ee (Skyla   2022-03-28 23:13:29 -0400  24) #include <QMenuBar>
+25:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  25) #include <QColor>
+51:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400  51)     void penColorButton();
+77:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  77)     QVector<QString> colors;
+78:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400  78)     const static int numButton = 20;
+79:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  79)     QPushButton *buttons[numButton];
+80:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  80)     QPalette colorPal[numButton];
+82:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  82) 
+111:49e571ee (Skyla   2022-03-28 23:13:29 -0400 111) 
+112:49e571ee (Skyla   2022-03-28 23:13:29 -0400 112)     QHBoxLayout *layout;
+113:49e571ee (Skyla   2022-03-28 23:13:29 -0400 113)     QVBoxLayout *layout2;
+114:d717a6c1 (Skyla   2022-03-31 00:33:15 -0400 114)     QGridLayout *layout3;
+
+21:5dc433b2 (Skyla   2022-03-30 22:45:28 -0400  21)     myPenWidth = 5;

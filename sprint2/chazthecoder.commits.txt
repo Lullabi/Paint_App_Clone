@@ -1,0 +1,53 @@
+scribblearea.h:
+34:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 34)     
+35:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 35)     void resetImageSize(QImage *image);
+36:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 36)     void inputResize(QSize newSize); 
+53:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 53) //    void resizeEvent(QResizeEvent *event) override;
+57:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 57)     void resizeImage(QImage *image, const QSize &newSize); 
+58:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 58)     void resize_Event(); 
+
+scribblearea.cpp:
+23:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400  23)     resize_Event();
+108:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 108) void ScribbleArea::resize_Event() { 
+109:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 109) 
+110:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 110)     int newWidth = 1550; 
+111:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 111)     int newHeight = 800; 
+112:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 112)     resizeImage(&image, QSize(newWidth, newHeight)); 
+113:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 113)     update(); 
+114:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 114) 
+115:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 115) } 
+123:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 123) void ScribbleArea::inputResize(QSize newSize) 
+124:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 124) {
+125:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 125)     resizeImage(&image, newSize); 
+126:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 126) } 
+127:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 127)
+
+misc_paint.cpp: 
+32:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400  32)     
+33:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400  33)     
+34:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400  34)     imageLabel = new QLabel; 
+35:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400  35)     scrollArea = new QScrollArea; 
+255:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 255)     
+256:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 256)     resizeAct = new QAction(tr("Resize Canvas"), this); 
+257:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 257)     connect(resizeAct, SIGNAL(triggered()), this, SLOT(resizeCanvas())); 
+276:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 276)     optionMenu->addAction(resizeAct); 
+349:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 349) void Misc_Paint::resizeCanvas() 
+350:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 350) { 
+352:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 352)     bool ok; 
+353:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 353)     int newWidth = QInputDialog::getInt(this, tr("Resize Width"),
+354:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 354)                                         tr("Select canvas width (in pixels) : "),
+355:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 355)                                         width(), 1, 1550, 1, &ok); 
+356:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 356)     int newHeight = QInputDialog::getInt(this, tr("Resize Height"),
+357:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 357)                                          tr("Select canvas height (in pixels) : "),
+358:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 358)                                          height(), 1, 800, 1, &ok); 
+359:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 359)     scribbleArea->inputResize(QSize(newWidth, newHeight)); 
+360:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 360)     imageLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); 
+361:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 361)     scrollArea->setWidget(imageLabel); 
+362:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 362)     scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); 
+363:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 363) 
+364:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 364)     //imageLabel->setAlignment(Qt::AlignCenter);
+365:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 365) } 
+
+misc_paint.h
+60:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400  60)     void resizeCanvas(); 
+106:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 106)     QAction *resizeAct;

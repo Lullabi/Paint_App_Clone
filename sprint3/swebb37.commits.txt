@@ -1,0 +1,124 @@
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 132) //implementation of this really occurs in scribblearea.cpp
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 133) void Misc_Paint::selectTool() {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 134)    if (!scribbleArea->isSelecting()) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 135)         scribbleArea->selecting = true;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 136)    }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 137) }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 138) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 139) void Misc_Paint::shapeTool() {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 141)    if (!scribbleArea->shapeIsSelected()) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 142)         scribbleArea->shapeSelected = true;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 143)    }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 144) }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 145) 
+db97cec (Skyla              2022-04-21 00:00:31 -0400 197) void Misc_Paint::penTypeTool() {
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 198) 
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 199)     QPushButton *button = (QPushButton *)sender();
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 200)     scribbleArea->pentype = button;
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 201) }
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 202) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 394)     // adding all the default color buttons
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 426)     //shape tool
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 428)     shapeToolButton->setText("Square/Rect");
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 430)     connect(shapeToolButton, SIGNAL(pressed()), this, SLOT(shapeTool()));
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 432) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 433)     //select tool
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 435)     selectToolButton->setText("Select");
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 436)     selectToolButton->setFixedWidth(50);
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 437)     connect(selectToolButton, SIGNAL(pressed()), this, SLOT(selectTool()));
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 489)     int numPenTypes = 2;
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 490)     QPushButton *pentypes[numPenTypes];
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 491)     for (int i = 0; i < numPenTypes; ++i) {
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 492)         pentypes[i] = new QPushButton();
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 493)         pentypes[i]->setFixedWidth(75);
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 494)         connect(pentypes[i], SIGNAL(pressed()), this, SLOT(penTypeTool()));
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 495)     }
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 496)     pentypes[0]->setText("Round");
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 497)     pentypes[1]->setText("Marker");
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 498) 
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 499)     QLabel *pentypenames = new QLabel();
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 500)     pentypenames->setText("Pen Types: ");
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 501)     pentypenames->setFixedWidth(75);
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 502)     layout3->addWidget(pentypenames, 7, 0);
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 503)     layout3->addWidget(pentypes[0], 8, 0);
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 504)     layout3->addWidget(pentypes[1], 9, 0);
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 505) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  72)     void selectTool();
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  73)     void shapeTool();
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400  74)     void penTypeTool();
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400  21)     myPenWidth = 15;
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400  23)     pentype = new QPushButton();
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400  24)     pentype->setText("Round");
+
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  59) bool ScribbleArea::isSelecting() { return selecting; }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  60) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  61) bool ScribbleArea::shapeIsSelected() { return shapeSelected; }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  62) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  63) void ScribbleArea::createShape(QPoint firstSelectPoint, QPoint lastSelectPoint) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  64)     qDebug() << "First, last: " << firstSelectPoint << ", " << lastSelectPoint;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  65)     qDebug() << firstSelectPoint.x();
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  66)     //QColor color;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  67)     QPoint tempPoint;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  68)     for (int i = firstSelectPoint.x(); i < lastSelectPoint.x(); ++i) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  69)         for (int j = firstSelectPoint.y(); j < lastSelectPoint.y(); ++j) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  70)             tempPoint.rx() = i;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  71)             tempPoint.ry() = j;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  72)             //qDebug() << "temppoint: " << tempPoint;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  73)             //color = Qt::black;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  75)         }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  76)     }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  78)     shapeSelected = false;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  79) }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  80) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  81) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  82) void ScribbleArea::select(QPoint firstSelectPoint, QPoint lastSelectPoint) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  83)     QPoint tempPoint;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  84)     for (int i = firstSelectPoint.x(); i < lastSelectPoint.x(); ++i) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  85)         for (int j = firstSelectPoint.y(); j < lastSelectPoint.y(); ++j) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  86)             tempPoint.rx() = i;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  87)             tempPoint.ry() = j;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  88)         }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  89)     }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  90)     selecting = false;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  91) }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400  92) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 119)     if (shapeIsSelected() || isSelecting()) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 120)         firstSelectPoint = event->pos();
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 121)     }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 122) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 135)     //qDebug() << lastPoint;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 139)     if (isSelecting() || shapeIsSelected()) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 140)         //return;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 141)     }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 152)     lastSelectPoint = event->pos();
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 153)     if (shapeIsSelected()) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 154)         createShape(firstSelectPoint, lastSelectPoint);
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 155)         //return;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 156)     } else if (isSelecting()) {
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 157)         select(firstSelectPoint, lastSelectPoint);
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 158)         //return;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 159)     }
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 160) 
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 166)     //qDebug() << event->pos();
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 195) void ScribbleArea::setPenType(QColor pc, QPainter *painter) {
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 196)     if (pentype->text() == "Round") {
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 197)         painter->setPen(QPen(pc, myPenWidth, Qt::SolidLine,
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 198)                             Qt::RoundCap, Qt::RoundJoin));
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 199)     } else if (pentype->text() == "Marker") {
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 200)         painter->setPen(QPen(pc, myPenWidth, Qt::SolidLine,
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 201)                             Qt::FlatCap, Qt::BevelJoin));
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 202)     }
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 203) }
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 204) 
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 209)     setPenType(pc, &painter);
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400  8) #include <QPainter>
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400  9) #include <QPushButton>
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 30)     bool isSelecting();
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 31)     bool shapeIsSelected();
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 32)     bool selecting;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 33)     bool shapeSelected;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 34)     void createShape(QPoint firstSelectPoint, QPoint lastSelectPoint);
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 35)     void select(QPoint firstSelectPoint, QPoint lastSelectPoint);
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 48)     void setPenType(QColor pc, QPainter *painter);
+ddb97cec (Skyla              2022-04-21 00:00:31 -0400 54)     QPushButton *pentype;
+28613f3d (Skyla              2022-04-18 01:59:04 -0400 89)     QPoint firstSelectPoint, lastSelectPoint;

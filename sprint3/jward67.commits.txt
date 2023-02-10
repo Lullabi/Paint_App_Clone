@@ -1,0 +1,169 @@
+"scribblearea.h"
+9:49:6d9037e4 (jward67            2022-04-21 13:44:07 -0400 49)     void fillCanvas(QColor c);
+
+"scribblearea.cpp"
+21:21:6d9037e4 (jward67            2022-04-21 13:44:07 -0400  21)     myPenWidth = 10;
+67:117:6d9037e4 (jward67            2022-04-21 13:44:07 -0400 117) void ScribbleArea::fillCanvas(QColor c) {
+68:118:6d9037e4 (jward67            2022-04-21 13:44:07 -0400 118)     image.fill(c);
+69:119:6d9037e4 (jward67            2022-04-21 13:44:07 -0400 119) }
+70:120:6d9037e4 (jward67            2022-04-21 13:44:07 -0400 120) 
+
+"misc_paint.h"
+9:49:6d9037e4 (jward67            2022-04-21 13:44:07 -0400 49)     void fillCanvas(QColor c);
+
+"misc_paint.cpp"
+77:127:75206f74 (jward67            2022-04-18 19:36:29 -0400 127) //    qDebug() << newColor;
+86:234:75206f74 (jward67            2022-04-18 19:36:29 -0400 234)     QColor newColor;
+87:242:75206f74 (jward67            2022-04-18 19:36:29 -0400 242)         newColor = ws->color();
+152:388:b5028a2e (jward67            2022-04-19 22:27:18 -0400 388)  //   layout = new QHBoxLayout(scribbleArea);
+153:389:b5028a2e (jward67            2022-04-19 22:27:18 -0400 389)     layout3 = new QGridLayout(scribbleArea);
+158:404:b5028a2e (jward67            2022-04-19 22:27:18 -0400 404)         layout3->addWidget(buttons[i], 0, i);
+176:432:b5028a2e (jward67            2022-04-19 22:27:18 -0400 432)     shapeToolButton->setFixedWidth(90);
+180:442:b5028a2e (jward67            2022-04-19 22:27:18 -0400 442) 
+181:443:b5028a2e (jward67            2022-04-19 22:27:18 -0400 443)     // RGB Sliders [BETA]:
+183:445:b5028a2e (jward67            2022-04-19 22:27:18 -0400 445)     redSlider->setRange(0, 255);
+185:447:b5028a2e (jward67            2022-04-19 22:27:18 -0400 447)     redLabel->setText("R");
+189:451:b5028a2e (jward67            2022-04-19 22:27:18 -0400 451) 
+191:453:b5028a2e (jward67            2022-04-19 22:27:18 -0400 453)     greenSlider->setRange(0, 255);
+193:455:b5028a2e (jward67            2022-04-19 22:27:18 -0400 455)     greenLabel->setText("G");
+197:459:b5028a2e (jward67            2022-04-19 22:27:18 -0400 459) 
+199:461:b5028a2e (jward67            2022-04-19 22:27:18 -0400 461)     blueSlider->setRange(0, 255);
+201:463:b5028a2e (jward67            2022-04-19 22:27:18 -0400 463)     blueLabel->setText("B");
+241:503:b5028a2e (jward67            2022-04-19 22:27:18 -0400 503) 
+259:535:b5028a2e (jward67            2022-04-19 22:27:18 -0400 535) 
+261:537:b5028a2e (jward67            2022-04-19 22:27:18 -0400 537) 
+159:407:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 407)     // Color 1 Button
+160:408:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 408)     colorOne = new QPushButton();
+161:410:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 410)     colorOne->setFixedWidth(30);
+163:414:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 414)     // Color 2 Button
+164:415:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 415)     colorTwo = new QPushButton();
+165:417:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 417)     colorTwo->setFixedWidth(30);
+168:422:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 422)     // color picker
+169:423:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 423)     colorPicker = new QPushButton();
+170:424:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 424)     colorPicker->setText("Color Picker");
+171:425:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 425)     colorPicker->setFixedWidth(90);
+172:426:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 426)     connect(colorPicker, SIGNAL(released()), this, SLOT(colorPickerButton()));
+175:430:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 430)     shapeToolButton = new QPushButton();
+178:437:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 437)     selectToolButton = new QPushButton();
+182:444:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 444)     redSlider = new QSlider(Qt::Horizontal);
+184:446:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 446)     redLabel = new QLabel();
+186:448:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 448) //    QSpinBox *redSpinBox = new QSpinBox();
+187:449:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 449) //    redSpinBox->setMinimum(0);
+188:450:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 450) //    redSpinBox->setMaximum(255);
+190:452:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 452)     greenSlider = new QSlider(Qt::Horizontal);
+192:454:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 454)     greenLabel = new QLabel();
+194:456:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 456) //    QSpinBox *greenSpinBox = new QSpinBox();
+195:457:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 457) //    greenSpinBox->setMinimum(0);
+196:458:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 458) //    greenSpinBox->setMaximum(255);
+198:460:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 460)     blueSlider = new QSlider(Qt::Horizontal);
+200:462:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 462)     blueLabel = new QLabel();
+202:464:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 464) //    QSpinBox *blueSpinBox = new QSpinBox();
+203:465:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 465) //    blueSpinBox->setMinimum(0);
+204:466:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 466) //    blueSpinBox->setMaximum(255);
+205:467:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 467) 
+206:468:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 468)     // Used to display new color of pen right beside RGB sliders
+207:469:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 469)     displayWidget = new QWidget;
+208:470:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 470)     displayWidget->autoFillBackground();
+209:471:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 471) //    connect(redSlider, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+210:472:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 472) //    connect(greenSlider, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+211:473:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 473) //    connect(blueSlider, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+212:474:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 474) //    onColorChanged(redSlider, greenSlider, blueSlider, displayWidget);
+213:475:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 475) 
+214:476:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 476)     // Group Box Test:
+257:533:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 533)     //setting alignment of buttons
+258:534:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 534)     layout3->setAlignment(Qt::AlignTop);
+260:536:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 536) }
+262:538:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 538) //onColorChanged
+263:539:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 539) /*
+264:540:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 540) void Misc_Paint::onColorChanged(QSlider *red, QSlider *green, QSlider *blue, QWidget *display) {
+265:541:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 541)     scribbleArea->myPenColor.setRgb(red->value(), green->value(), blue->value());
+266:542:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 542)     QPalette pal = display->palette();
+267:543:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 543)     pal.setColor(QPalette::Window, scribbleArea->myPenColor);
+268:544:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 544)     display->setPalette(pal);
+269:545:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 545)     emit colorChanged(scribbleArea->myPenColor);
+271:547:eeb275d3 (jward67            2022-04-20 22:51:42 -0400 547) */
+88:244:6d9037e4 (jward67            2022-04-21 13:44:07 -0400 244)         if (newColor.isValid()) { scribbleArea->fillCanvas(newColor); }
+162:412:5b62581b (jward67            2022-04-21 12:48:34 -0400 412) //    layout3->addWidget(colorOne, 4, 3);
+166:419:5b62581b (jward67            2022-04-21 12:48:34 -0400 419) //    layout3->addWidget(colorTwo, 4, 4);
+173:427:5b62581b (jward67            2022-04-21 12:48:34 -0400 427) //    layout3->addWidget(colorPicker, 4, 0);
+177:434:5b62581b (jward67            2022-04-21 12:48:34 -0400 434) //    layout3->addWidget(shapeToolButton, 5, 0);
+179:441:5b62581b (jward67            2022-04-21 12:48:34 -0400 441) //    layout3->addWidget(selectToolButton, 6, 0);
+215:477:5b62581b (jward67            2022-04-21 12:48:34 -0400 477)     mainBox = new QGroupBox();
+216:478:5b62581b (jward67            2022-04-21 12:48:34 -0400 478)     mainGrid = new QGridLayout;
+217:479:5b62581b (jward67            2022-04-21 12:48:34 -0400 479) 
+218:480:5b62581b (jward67            2022-04-21 12:48:34 -0400 480)     rgbColorBox = new QGroupBox(tr("RGB Color Picker:"));
+219:481:5b62581b (jward67            2022-04-21 12:48:34 -0400 481)     grid1 = new QGridLayout;
+220:482:5b62581b (jward67            2022-04-21 12:48:34 -0400 482)     grid1->addWidget(redLabel, 0, 0);
+221:483:5b62581b (jward67            2022-04-21 12:48:34 -0400 483)     grid1->addWidget(greenLabel, 1, 0);
+222:484:5b62581b (jward67            2022-04-21 12:48:34 -0400 484)     grid1->addWidget(blueLabel, 2, 0);
+223:485:5b62581b (jward67            2022-04-21 12:48:34 -0400 485)     grid1->addWidget(redSlider, 0, 1);
+224:486:5b62581b (jward67            2022-04-21 12:48:34 -0400 486) //    grid1->addWidget(redSpinBox, 0, 2);
+225:487:5b62581b (jward67            2022-04-21 12:48:34 -0400 487)     grid1->addWidget(greenSlider, 1, 1);
+226:488:5b62581b (jward67            2022-04-21 12:48:34 -0400 488) //    grid1->addWidget(greenSpinBox, 1, 2);
+227:489:5b62581b (jward67            2022-04-21 12:48:34 -0400 489)     grid1->addWidget(blueSlider, 2, 1);
+228:490:5b62581b (jward67            2022-04-21 12:48:34 -0400 490) //    grid1->addWidget(blueSpinBox, 2, 2);
+229:491:5b62581b (jward67            2022-04-21 12:48:34 -0400 491)     grid1->addWidget(displayWidget, 0, 3, 2, 5);
+230:492:5b62581b (jward67            2022-04-21 12:48:34 -0400 492)     rgbColorBox->setLayout(grid1);
+231:493:5b62581b (jward67            2022-04-21 12:48:34 -0400 493)     mainGrid->addWidget(rgbColorBox, 0, 0);
+232:494:5b62581b (jward67            2022-04-21 12:48:34 -0400 494) //    layout3->addWidget(rgbColorBox, 1, 0, 3, 7);
+233:495:5b62581b (jward67            2022-04-21 12:48:34 -0400 495) 
+234:496:5b62581b (jward67            2022-04-21 12:48:34 -0400 496)     toolBox = new QGroupBox(tr("Tools:"));
+235:497:5b62581b (jward67            2022-04-21 12:48:34 -0400 497)     grid2 = new QGridLayout;
+236:498:5b62581b (jward67            2022-04-21 12:48:34 -0400 498)     grid2->addWidget(colorPicker, 0, 0);
+237:499:5b62581b (jward67            2022-04-21 12:48:34 -0400 499)     grid2->addWidget(selectToolButton, 1, 0);
+238:500:5b62581b (jward67            2022-04-21 12:48:34 -0400 500)     grid2->addWidget(shapeToolButton, 1, 1);
+239:501:5b62581b (jward67            2022-04-21 12:48:34 -0400 501)     toolBox->setLayout(grid2);
+240:502:5b62581b (jward67            2022-04-21 12:48:34 -0400 502)     mainGrid->addWidget(toolBox, 1, 0);
+242:517:5b62581b (jward67            2022-04-21 12:48:34 -0400 517) //    layout3->addWidget(pentypenames, 7, 0);
+243:518:5b62581b (jward67            2022-04-21 12:48:34 -0400 518) //    layout3->addWidget(pentypes[0], 8, 0);
+244:519:5b62581b (jward67            2022-04-21 12:48:34 -0400 519) //    layout3->addWidget(pentypes[1], 9, 0);
+245:520:5b62581b (jward67            2022-04-21 12:48:34 -0400 520) 
+246:521:5b62581b (jward67            2022-04-21 12:48:34 -0400 521)     penBox = new QGroupBox(tr("Pen Types:"));
+247:522:5b62581b (jward67            2022-04-21 12:48:34 -0400 522)     grid3 = new QGridLayout;
+248:523:5b62581b (jward67            2022-04-21 12:48:34 -0400 523)     grid3->addWidget(colorOne, 0, 0);
+249:524:5b62581b (jward67            2022-04-21 12:48:34 -0400 524)     grid3->addWidget(colorTwo, 1, 0);
+250:525:5b62581b (jward67            2022-04-21 12:48:34 -0400 525)     grid3->addWidget(pentypes[0], 0, 1);
+251:526:5b62581b (jward67            2022-04-21 12:48:34 -0400 526)     grid3->addWidget(pentypes[1], 1, 1);
+252:527:5b62581b (jward67            2022-04-21 12:48:34 -0400 527)     penBox->setLayout(grid3);
+253:528:5b62581b (jward67            2022-04-21 12:48:34 -0400 528)     mainGrid->addWidget(penBox, 2, 0);
+254:529:5b62581b (jward67            2022-04-21 12:48:34 -0400 529) 
+255:530:5b62581b (jward67            2022-04-21 12:48:34 -0400 530)     mainBox->setLayout(mainGrid);
+256:531:6d9037e4 (jward67            2022-04-21 13:44:07 -0400 531)     layout3->addWidget(mainBox, 1, 0, 1, 8);
+
+"winsize.h"
+1:1:75206f74 (jward67 2022-04-18 19:36:29 -0400  1) //
+2:2:75206f74 (jward67 2022-04-18 19:36:29 -0400  2) // Created by Leoked, Updated by Jonathan Ward on April 18, 2022
+3:3:75206f74 (jward67 2022-04-18 19:36:29 -0400  3) // Note: code for color picker created by Miroslav Bendik on Dec 19, 2012
+4:4:75206f74 (jward67 2022-04-18 19:36:29 -0400  4) //
+5:10:75206f74 (jward67 2022-04-18 19:36:29 -0400 10) #include <QWidget>
+6:11:75206f74 (jward67 2022-04-18 19:36:29 -0400 11) #include <QColor>
+7:20:75206f74 (jward67 2022-04-18 19:36:29 -0400 20)     Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
+8:35:75206f74 (jward67 2022-04-18 19:36:29 -0400 35)     QColor color() const {
+9:36:75206f74 (jward67 2022-04-18 19:36:29 -0400 36)         return m_color;
+10:37:75206f74 (jward67 2022-04-18 19:36:29 -0400 37)     }
+11:38:75206f74 (jward67 2022-04-18 19:36:29 -0400 38) 
+12:39:75206f74 (jward67 2022-04-18 19:36:29 -0400 39) signals:
+13:40:75206f74 (jward67 2022-04-18 19:36:29 -0400 40)     void colorChanged(QColor arg);
+14:41:75206f74 (jward67 2022-04-18 19:36:29 -0400 41) 
+15:55:75206f74 (jward67 2022-04-18 19:36:29 -0400 55)     void onColorChanged();
+16:56:75206f74 (jward67 2022-04-18 19:36:29 -0400 56) 
+17:61:75206f74 (jward67 2022-04-18 19:36:29 -0400 61)     QColor m_color;
+
+"winsize.cpp"
+1:1:75206f74 (jward67 2022-04-18 19:36:29 -0400  1) //
+2:2:75206f74 (jward67 2022-04-18 19:36:29 -0400  2) // Created by leoked, Updated by jward67 on April 18, 2022
+3:3:75206f74 (jward67 2022-04-18 19:36:29 -0400  3) // Note: code for color picker created by Miroslav Bendik on Dec 19, 2012
+4:4:75206f74 (jward67 2022-04-18 19:36:29 -0400  4) //
+5:5:75206f74 (jward67 2022-04-18 19:36:29 -0400  5) #include <QPalette>
+6:14:75206f74 (jward67 2022-04-18 19:36:29 -0400 14)     connect(ui->redSlider, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+7:15:75206f74 (jward67 2022-04-18 19:36:29 -0400 15)     connect(ui->greenSlider, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+8:16:75206f74 (jward67 2022-04-18 19:36:29 -0400 16)     connect(ui->blueSlider, SIGNAL(valueChanged(int)), SLOT(onColorChanged()));
+9:17:75206f74 (jward67 2022-04-18 19:36:29 -0400 17)     onColorChanged();
+10:66:75206f74 (jward67 2022-04-18 19:36:29 -0400 66) void winSize::onColorChanged()
+11:67:75206f74 (jward67 2022-04-18 19:36:29 -0400 67) {
+12:68:75206f74 (jward67 2022-04-18 19:36:29 -0400 68)     m_color.setRgb(ui->redSlider->value(), ui->greenSlider->value(), ui->blueSlider->value());
+13:69:75206f74 (jward67 2022-04-18 19:36:29 -0400 69)     QPalette pal = ui->displayWidget->palette();
+14:70:75206f74 (jward67 2022-04-18 19:36:29 -0400 70)     pal.setColor(QPalette::Window, m_color);
+15:71:75206f74 (jward67 2022-04-18 19:36:29 -0400 71)     ui->displayWidget->setPalette(pal);
+16:72:75206f74 (jward67 2022-04-18 19:36:29 -0400 72)     emit colorChanged(m_color);
+17:73:75206f74 (jward67 2022-04-18 19:36:29 -0400 73) }

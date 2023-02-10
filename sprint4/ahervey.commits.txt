@@ -1,0 +1,31 @@
+In Demo/
+- Created executable directory and deployed the program
+
+In README.md
+- To begin drawing in PaintApp, first select "New File" in the header of PaintApp and select the width and height of your canvas 
+(limits as of now are 1000 for both). Altermatively you can open whatever image you have on your computer and start drawing however you like. 
+The porgram also gives you the option to select the default canvas color so you can get more creative with what you're creating.
+
+- Adding shapes to the canvas
+- Decreasing/Increasing the opacity of the brush
+- Different types of brushes
+- Eraser tool
+
+- There isn't a whole lot of features that come with the application but it's a solid program that follows a blueprint similar to MS Paint well. 
+For the most part, the program is self explanatory. The only thing that's unique to our program is the C1/C2 which allows you to have different colors 
+for the pen that you can use by drawing using left or right click.
+
+In paint_app_tut/misc_paint.h
+- double buffer = .20;
+
+In paint_app_tut/scribblearea.cpp
+- if (test == 0 || test == 1 || (ustack.last() == ustack.front() && test == 2)){
+        return;
+    }
+    
+In paint_app_tut/misc_paint.cpp
+- void Misc_Paint::setErase() {
+    scribbleArea->setPenColor(canvasColor);
+}
+- increaseOpacity->setShortcut(tr("Ctrl+Shift+="));
+- decreaseOpacity->setShortcut(tr("Ctrl+-"));

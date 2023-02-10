@@ -1,0 +1,67 @@
+## In paint_app_tut/scribblearea.cpp
+
+void ScribbleArea::redoCall() {
+    if (image == rstack.front()) {
+        image = rstack[1];
+        ustack.push_back(image);
+        ustack.push_back(image);
+        rstack.pop_front();
+    }
+    else {
+        image = rstack.front();
+        ustack.push_back(image);
+        ustack.push_back(image);
+        rstack.pop_front();
+    }
+    update();
+}
+
+void ScribbleArea::undoCall() {
+    //history->pop();
+    if (!(ustack.isEmpty())){
+        if (ustack.size() == 2){
+            rstack.push_front(ustack.last());
+            ustack.pop_back();
+        }
+        else { 
+            rstack.push_front(ustack.last());
+            ustack.pop_back();
+            ustack.pop_back();
+        }
+        if (image == ustack.last()){
+            ustack.pop_back();
+            image = ustack.last();
+        }
+        else
+            image = ustack.last();
+        update();
+    }
+    //image = history->top();
+}
+
+if (!rstack.isEmpty()) (Added to drawlineto function)
+        rstack.clear();
+ 
+ ustack.push_back(image); (Added to both mouse press/release event)
+    
+## In paint_app_tut/scribblearea.h
+
+void undoCall();
+void redoCall();
+
+QVector <QImage> ustack;
+QVector <QImage> rstack;
+
+## In paint_app_tut/misc_paint.cpp
+
+void Misc_Paint::undo() {
+    if (scribbleArea->ustack.isEmpty()) {}
+    else
+        scribbleArea->undoCall();
+}
+
+void Misc_Paint::redo() {
+    if (scribbleArea->rstack.isEmpty()) {}
+    else
+        scribbleArea->redoCall();
+}

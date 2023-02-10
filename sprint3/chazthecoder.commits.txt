@@ -1,0 +1,181 @@
+misc_paint.h
+31:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400  31)     
+32:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400  32)     
+33:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400  33)     imageLabel = new QLabel; 
+34:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400  34)     scrollArea = new QScrollArea; 
+
+misc_paint.cpp
+319:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 319)     
+320:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 320)     resizeAct = new QAction(tr("Resize Canvas"), this); 
+321:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 321)     connect(resizeAct, SIGNAL(triggered()), this, SLOT(resizeCanvas())); 
+340:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 340)     optionMenu->addAction(resizeAct); 
+440:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 440)     //line tool
+441:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 441)     lineToolButton = new QPushButton();
+442:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 442)     lineToolButton->setText("Line");
+443:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 443)     lineToolButton->setFixedWidth(40);
+444:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 444)     connect(lineToolButton, SIGNAL(pressed()), this, SLOT(line_tool()));
+445:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 445)     
+502:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 502)     grid2->addWidget(lineToolButton, 0, 1);
+553:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 553) void Misc_Paint::fill_tool()
+554:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 554) {
+555:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 555)     if (scribbleArea->fill_mode == true)
+556:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 556)     {
+557:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 557)         scribbleArea->fill_mode = false;
+558:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 558)     }
+559:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 559)     else
+560:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 560)     {
+561:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 561)         scribbleArea->fill_mode = true;
+562:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 562)         scribbleArea->line_mode = false;
+563:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 563)     }
+564:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 564) 
+565:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 565) }
+566:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 566) 
+567:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 567) void Misc_Paint::line_tool()
+568:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 568) {
+569:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 569)     if (scribbleArea->line_mode == true)
+570:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 570)     {
+571:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 571)         scribbleArea->line_mode = false;
+572:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 572)     }
+573:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 573)     else
+574:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 574)     {
+575:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 575)         scribbleArea->line_mode = true;
+576:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 576)         scribbleArea->fill_mode = false;
+577:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 577)     }
+578:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 578) }
+579:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 579) 
+580:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 580) void Misc_Paint::resizeCanvas() 
+581:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 581) { 
+583:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 583)     bool ok; 
+584:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 584)     int newWidth = QInputDialog::getInt(this, tr("Resize Width"),
+585:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 585)                                         tr("Select canvas width (in pixels) : "),
+586:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 586)                                         width(), 1, 1550, 1, &ok); 
+587:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 587)     int newHeight = QInputDialog::getInt(this, tr("Resize Height"),
+588:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 588)                                          tr("Select canvas height (in pixels) : "),
+589:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 589)                                          height(), 1, 800, 1, &ok); 
+590:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 590)     scribbleArea->inputResize(QSize(newWidth, newHeight)); 
+591:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 591)     imageLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); 
+592:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 592)     scrollArea->setWidget(imageLabel); 
+593:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 593)     scrollArea->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); 
+594:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 594) 
+595:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 595)     //imageLabel->setAlignment(Qt::AlignCenter);
+596:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 596) } 
+
+scribblearea.cpp
+21:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400  21)     line_mode = false;
+22:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400  22)     fill_mode = false;
+29:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400  29)     resize_Event();
+129:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 129)     if((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) && !(line_mode) && !(fill_mode)) {
+141:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 141)     else if ((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) && (fill_mode))
+142:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 142)     {
+143:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 143)         lastPoint = event->pos();
+144:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 144) 
+145:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 145)         QColor newColor;
+146:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 146)         qDebug() << getPosition();
+147:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 147)         newColor = getImage().pixelColor(getPosition());
+148:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 148) 
+149:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 149)         QColor tmp;
+150:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 150)         if(event->button() == Qt::LeftButton) {
+151:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 151)             tmp = penColor();
+152:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 152)         }
+153:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 153)         else {
+154:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 154)             tmp = rightPenColor();
+155:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 155)         }
+156:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 156) 
+157:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 157)         QPainter painter(&image);
+158:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 158)         painter.setPen(tmp);
+159:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 159) 
+160:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 160)         QBrush brush;
+161:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 161)         brush.setColor(tmp);
+162:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 162)         brush.setStyle(Qt::SolidPattern);
+163:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 163) 
+164:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 164)                //painter.fillPath(brush);
+165:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 165) 
+166:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 166)     }
+167:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 167)     else if ((event->button() == Qt::LeftButton || event->button() == Qt::RightButton) && (line_mode))
+168:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 168)     {
+169:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 169)         lastPoint = event->pos();
+170:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 170)      //          last_X = event->pos().x();
+171:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 171)       //         last_Y = event->pos().y();
+172:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 172) 
+173:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 173)         QColor tmp;
+174:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 174)         if(event->button() == Qt::LeftButton) {
+175:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 175)             tmp = penColor();
+176:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 176)         }
+177:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 177)         else {
+178:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 178)             tmp = rightPenColor();
+179:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 179)         }
+180:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 180) 
+181:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 181)         QPainter line(&image);
+182:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 182)     }
+197:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 197)     if ((event->buttons() & Qt::LeftButton) && line_mode)
+198:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 198)     {
+199:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 199)         QPainter line (&image);
+200:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 200)         qInfo("Line Button\n");
+201:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 201)         QPen pen;
+202:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 202)         if (line_drawn) undoCall();
+203:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 203)         pen.setColor(penColor());
+204:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 204)         pen.setWidth(myPenWidth);
+205:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 205)         line.setPen(pen);
+206:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 206)         line.drawLine(lastPoint, event->pos());
+207:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 207)         line_drawn = true;
+208:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 208)      //       int rad = (myPenWidth / 2) + 2;
+209:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 209)         qInfo("Test Push\n");
+210:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 210)         ustack.push_back(image);
+211:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 211)         qInfo("Test Update\n");
+212:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 212)         update();
+213:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 213)         qInfo("Pass\n");
+214:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 214)     }
+215:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 215) 
+216:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 216)     if ((event->buttons() & Qt::RightButton) && line_mode)
+217:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 217)     {
+218:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 218)         QPainter line (&image);
+219:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 219)         qInfo("Line Button\n");
+220:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 220)         QPen pen;
+221:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 221)         if (line_drawn) undoCall();
+222:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 222)         pen.setColor(rightPenColor());
+223:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 223)         pen.setWidth(myPenWidth);
+224:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 224)         line.setPen(pen);
+225:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 225)         line.drawLine(lastPoint, event->pos());
+226:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 226)         line_drawn = true;
+227:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 227)     //        int rad = (myPenWidth / 2) + 2;
+228:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 228)         qInfo("Test Push\n");
+229:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 229)         ustack.push_back(image);
+230:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 230)         qInfo("Test Update\n");
+231:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 231)         update();
+232:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 232)         qInfo("Pass\n");
+233:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 233) 
+234:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 234)      }
+251:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 251)     
+252:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 252)     if (event->button() == Qt::LeftButton && line_mode)
+253:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 253)     {
+254:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 254)         line_drawn = false;
+255:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 255)     }
+266:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 266) void ScribbleArea::resize_Event() { 
+267:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 267) 
+268:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 268)     int newWidth = 1550; 
+269:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 269)     int newHeight = 800; 
+270:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 270)     resizeImage(&image, QSize(newWidth, newHeight)); 
+271:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 271)     update(); 
+272:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 272) 
+273:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 273) } 
+281:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 281) void ScribbleArea::inputResize(QSize newSize) 
+282:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 282) {
+283:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 283)     resizeImage(&image, newSize);
+284:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 284)     update();
+285:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 285) } 
+286:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 286) 
+
+scribblearea.h
+34:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 34)     bool fill_mode;
+35:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 35)     bool line_mode;
+48:583ccf50 (Payton Chaz Creech 2022-04-07 13:10:12 -0400 48)     void resetImageSize(QImage *image);
+49:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 49)     void inputResize(QSize newSize); 
+71:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 71) //    void resizeEvent(QResizeEvent *event) override;
+75:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 75)     void resizeImage(QImage *image, const QSize &newSize); 
+76:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 76)     void resize_Event(); 
+79:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 79)     bool line_drawn;
+71:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400  71)     void fill_tool();
+72:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400  72)     void line_tool();
+73:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400  73)     void resizeCanvas(); 
+103:6cded11f (Payton Chaz Creech 2022-04-21 21:10:18 -0400 103)                 *shapeToolButton, *selectToolButton, *lineToolButton;
+133:b051040a (Payton Chaz Creech 2022-04-07 22:57:52 -0400 133)     QAction *resizeAct;

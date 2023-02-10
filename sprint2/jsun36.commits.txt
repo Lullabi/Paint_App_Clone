@@ -1,0 +1,150 @@
+#scribblearea.cpp
+04413c62 (leoked             2022-04-05 14:17:49 -0400  71)     if(event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
+04413c62 (leoked             2022-04-05 14:17:49 -0400  74)         QColor tmp;
+04413c62 (leoked             2022-04-05 14:17:49 -0400  75)         if(event->button() == Qt::LeftButton) {
+04413c62 (leoked             2022-04-05 14:17:49 -0400  76)             tmp = penColor();
+04413c62 (leoked             2022-04-05 14:17:49 -0400  77)         }
+04413c62 (leoked             2022-04-05 14:17:49 -0400  78)         else {
+04413c62 (leoked             2022-04-05 14:17:49 -0400  79)             tmp = rightPenColor();
+04413c62 (leoked             2022-04-05 14:17:49 -0400  80)         }
+04413c62 (leoked             2022-04-05 14:17:49 -0400  81) 
+04413c62 (leoked             2022-04-05 14:17:49 -0400  82)         drawLineTo(event->pos(), tmp);
+04413c62 (leoked             2022-04-05 14:17:49 -0400  88)         drawLineTo(event->pos(), penColor());
+04413c62 (leoked             2022-04-05 14:17:49 -0400  89) 
+04413c62 (leoked             2022-04-05 14:17:49 -0400  90)     if ((event->buttons() & Qt::RightButton) && scribbling)
+04413c62 (leoked             2022-04-05 14:17:49 -0400  91)         drawLineTo(event->pos(), rightPenColor());
+04413c62 (leoked             2022-04-05 14:17:49 -0400  96)         drawLineTo(event->pos(),penColor());
+d807ada3 (leoked             2022-03-29 19:25:40 -0400 117) void ScribbleArea::newWindow(int w, int h)  {
+d807ada3 (leoked             2022-03-29 19:25:40 -0400 118)     resizeImage(&image, QSize(w, h));
+d807ada3 (leoked             2022-03-29 19:25:40 -0400 119)     image.fill(qRgb(255, 255, 255));
+d807ada3 (leoked             2022-03-29 19:25:40 -0400 120)     update();
+d807ada3 (leoked             2022-03-29 19:25:40 -0400 121) }
+d807ada3 (leoked             2022-03-29 19:25:40 -0400 122) 
+04413c62 (leoked             2022-04-05 14:17:49 -0400 128) void ScribbleArea::drawLineTo(const QPoint &endPoint, QColor pc) {
+04413c62 (leoked             2022-04-05 14:17:49 -0400 132)     painter.setPen(QPen(pc, myPenWidth, Qt::SolidLine,
+
+#scriblearea.h
+04413c62 (leoked             2022-04-05 14:17:49 -0400 32)     QColor rightPenColor() const { return myRightPenColor;}
+04413c62 (leoked             2022-04-05 14:17:49 -0400 56)     void drawLineTo(const QPoint &endPoint,QColor pc);
+
+#misc_paint.cpp
+9ad1cf06 (leoked             2022-03-29 20:21:36 -0400  16) #include "winsize.h"
+d807ada3 (leoked             2022-03-29 19:25:40 -0400  31)     resize(1550, 800);
+39a57125 (leoked             2022-03-31 11:37:53 -0400 184) void Misc_Paint::newWindow() {
+39a57125 (leoked             2022-03-31 11:37:53 -0400 185)     winSize *ws= new winSize;
+39a57125 (leoked             2022-03-31 11:37:53 -0400 186)     ws->show();
+39a57125 (leoked             2022-03-31 11:37:53 -0400 187)     ws->exec();
+33d9f077 (leoked             2022-03-31 13:31:46 -0400 188)     if(ws->result()) {
+33d9f077 (leoked             2022-03-31 13:31:46 -0400 189)         int w = ws->get_w();
+33d9f077 (leoked             2022-03-31 13:31:46 -0400 190)         int h = ws->get_h();
+33d9f077 (leoked             2022-03-31 13:31:46 -0400 191)         maybeSave();
+33d9f077 (leoked             2022-03-31 13:31:46 -0400 192)         scribbleArea->newWindow(w,h);
+33d9f077 (leoked             2022-03-31 13:31:46 -0400 193)     }
+d807ada3 (leoked             2022-03-29 19:25:40 -0400 254)     connect(newAct, SIGNAL(triggered()), this, SLOT(newWindow()));
+
+#winsize.cpp
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  1) #include "winsize.h"
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  2) #include "ui_winsize.h"
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  3) 
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  4) winSize::winSize(QWidget *parent) :
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  5)     QDialog(parent),
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  6)     ui(new Ui::winSize)
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  7) {
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  8)     ui->setupUi(this);
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  9) }
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 10) 
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 11) winSize::~winSize()
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 12) {
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 13)     delete ui;
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 14) }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 15) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 16) void winSize::set_w(int wi) {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 17)     w = wi;
+39a57125 (leoked 2022-03-31 11:37:53 -0400 18) }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 19) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 20) void winSize::set_h(int he) {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 21)     h = he;
+39a57125 (leoked 2022-03-31 11:37:53 -0400 22) }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 23) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 24) void winSize::on_buttonBox_accepted() {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 25)     set_w(ui->w_box->value());
+39a57125 (leoked 2022-03-31 11:37:53 -0400 26)     set_h(ui->h_box->value());
+39a57125 (leoked 2022-03-31 11:37:53 -0400 27) }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 28) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 29) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 30) //void winSize::on_buttonBox_clicked(QAbstractButton *button) {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 31)     //set_w(ui->w_box->value());
+39a57125 (leoked 2022-03-31 11:37:53 -0400 32)     //set_h(ui->h_box->value());
+39a57125 (leoked 2022-03-31 11:37:53 -0400 33) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 34) //}
+39a57125 (leoked 2022-03-31 11:37:53 -0400 35) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 36) void winSize::on_pushButton_2_clicked() {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 37)     ui->w_box->setValue(ui->w_box->value() + 1);
+39a57125 (leoked 2022-03-31 11:37:53 -0400 38) }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 39) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 40) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 41) void winSize::on_pushButton_clicked() {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 42)     ui->w_box->setValue(ui->w_box->value() - 1);
+39a57125 (leoked 2022-03-31 11:37:53 -0400 43) }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 44) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 45) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 46) void winSize::on_pushButton_4_clicked()
+39a57125 (leoked 2022-03-31 11:37:53 -0400 47) {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 48)     ui->h_box->setValue(ui->h_box->value() + 1);
+39a57125 (leoked 2022-03-31 11:37:53 -0400 49) }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 50) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 51) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 52) void winSize::on_pushButton_3_clicked()
+39a57125 (leoked 2022-03-31 11:37:53 -0400 53) {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 54)     ui->h_box->setValue(ui->h_box->value() - 1);
+39a57125 (leoked 2022-03-31 11:37:53 -0400 55) }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 56)
+
+#winsize.h
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  1) #ifndef WINSIZE_H
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  2) #define WINSIZE_H
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  3) 
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  4) #include <QDialog>
+39a57125 (leoked 2022-03-31 11:37:53 -0400  5) #include <QAbstractButton>
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  6) 
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  7) namespace Ui {
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  8) class winSize;
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400  9) }
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 10) 
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 11) class winSize : public QDialog
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 12) {
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 13)     Q_OBJECT
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 14) 
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 15) public:
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 16)     explicit winSize(QWidget *parent = nullptr);
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 17)     ~winSize();
+39a57125 (leoked 2022-03-31 11:37:53 -0400 18)     int get_w() const {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 19)         return w;
+39a57125 (leoked 2022-03-31 11:37:53 -0400 20)     }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 21)     int get_h() const {
+39a57125 (leoked 2022-03-31 11:37:53 -0400 22)         return h;
+39a57125 (leoked 2022-03-31 11:37:53 -0400 23)     }
+39a57125 (leoked 2022-03-31 11:37:53 -0400 24) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 25)     void set_w(int wi = 100);
+39a57125 (leoked 2022-03-31 11:37:53 -0400 26)     void set_h(int he = 100);
+39a57125 (leoked 2022-03-31 11:37:53 -0400 27) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 28) private slots:
+39a57125 (leoked 2022-03-31 11:37:53 -0400 29)     void on_buttonBox_accepted();
+39a57125 (leoked 2022-03-31 11:37:53 -0400 30) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 31)     //void on_buttonBox_clicked(QAbstractButton *button);
+39a57125 (leoked 2022-03-31 11:37:53 -0400 32) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 33)     void on_pushButton_2_clicked();
+39a57125 (leoked 2022-03-31 11:37:53 -0400 34) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 35)     void on_pushButton_clicked();
+39a57125 (leoked 2022-03-31 11:37:53 -0400 36) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 37)     void on_pushButton_4_clicked();
+39a57125 (leoked 2022-03-31 11:37:53 -0400 38) 
+39a57125 (leoked 2022-03-31 11:37:53 -0400 39)     void on_pushButton_3_clicked();
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 40) 
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 41) private:
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 42)     Ui::winSize *ui;
+39a57125 (leoked 2022-03-31 11:37:53 -0400 43)     int w = 100;
+39a57125 (leoked 2022-03-31 11:37:53 -0400 44)     int h = 100;
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 45) };
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 46) 
+9ad1cf06 (leoked 2022-03-29 20:21:36 -0400 47) #endif // WINSIZE_H
